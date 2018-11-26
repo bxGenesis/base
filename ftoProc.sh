@@ -49,9 +49,11 @@ _CommentEnd_
 ####+BEGIN: bx:dblock:ploneProc:bash:nodesList :types ""
 # {{{ DBLOCK-nodesList
 nodesList="
+fbxoPkgs
 overview
 base
 vagrants
+vagrantBue
 "
 # }}} DBLOCK-nodesList
 ####+END:
