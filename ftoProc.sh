@@ -53,6 +53,15 @@ _CommentEnd_
 ####+BEGIN: bx:dblock:ploneProc:bash:nodesList :types ""
 # {{{ DBLOCK-nodesList
 nodesList="
+<<<<<<< HEAD
+=======
+vagrantBue
+provisioners
+overview
+base
+vagrants
+fbxoPkgs
+>>>>>>> 07a3819b51b7a0118a298b4979ceabdedae3b59c
 "
 # }}} DBLOCK-nodesList
 ####+END:
