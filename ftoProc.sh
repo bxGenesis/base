@@ -16,7 +16,7 @@ SEED="
 *  /[dblock]/ /Seed/ :: [[file:/bisos/core/bsip/bin/seedFtoCommon.sh]] | 
 "
 FILE="
-*  /This File/ :: /bisos/git/auth/bxRepos/bxGenesis/base/ftoProc.sh 
+*  /This File/ :: /bisos/git/auth/bxRepos/bxGenesis/ftoProc.sh 
 "
 if [ "${loadFiles}" == "" ] ; then
     /bisos/core/bsip/bin/seedFtoCommon.sh -l $0 "$@" 
@@ -53,15 +53,11 @@ _CommentEnd_
 ####+BEGIN: bx:dblock:ploneProc:bash:nodesList :types ""
 # {{{ DBLOCK-nodesList
 nodesList="
-<<<<<<< HEAD
-=======
 vagrantBue
 provisioners
 overview
-base
 vagrants
 fbxoPkgs
->>>>>>> 07a3819b51b7a0118a298b4979ceabdedae3b59c
 "
 # }}} DBLOCK-nodesList
 ####+END:
