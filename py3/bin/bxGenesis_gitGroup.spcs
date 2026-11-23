@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+""" #+begin_org
+* ~[Summary]~ :: A spread-planted =PlantedCmndService= declaring the bxGenesis gitGroup's rules.
+#+end_org """
+
+""" #+begin_org
+* [[elisp:(org-cycle)][| ~Description~ |]] :: Planted on bisos.gitist's =gitGroup-seed.cs=.
+Spread-planted: the gitGroup's name and directory come from where this file really lives --- the
+gitGroup directory is its base repo's parent (=/bisos/git/bxRepos/bxGenesis=), the name is that
+directory's name (=bxGenesis=). On PATH through a symlink in =/bisos/core/bsip/bin= (the symlink is
+resolved). Every git repo under the gitGroup directory is a member. The root =.gitignore= and
+=.gitattributes= come from the same templates =bx-gitRepos -i baseUpdateDotIgnore= copies. No
+member is a pip package, so nothing is generated and there is no =notTracked= rule. No member is custom.
+- =bxGenesis_gitGroup.spcs -i gitGroup_status=  --- read-only
+- =bxGenesis_gitGroup.spcs -i gitGroup_update=  --- writes missing/stale files; never stages
+- =bxGenesis_gitGroup.spcs -i gitGroup_cachedListUpdate=  --- the list for Blee's Magit menu
+Modeled on =bisos-pip/base/py3/bin/bisos-pip_gitGroup.spcs=.
+#+end_org """
+
+from bisos.gitist import gitGroup_seed  # noqa: F401  _atExit_
+
+from bisos.gitist import gitGroup_seedInfo
+fileFromTemplate = gitGroup_seedInfo.fileFromTemplate
+
+templates = "/bisos/apps/defaults/begin/templates/moded/git"
+
+gitGroup_seedInfo.setup(
+    rules=[
+        fileFromTemplate(".gitignore", f"{templates}/gitignore/emacs+py+tex"),
+        fileFromTemplate(".gitattributes", f"{templates}/gitattributes/py"),
+    ],
+)

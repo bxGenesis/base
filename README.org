@@ -1,0 +1,85 @@
+#+title: bxGenesis/base: The Base Repo of the bxGenesis gitGroup
+#+DATE: <2026-11-23 Mon>
+#+AUTHOR: Mohsen BANAN
+#+OPTIONS: toc:4
+
+* Overview
+
+bxGenesis is the gitGroup of the BISOS genesis: the repos that create a BISOS platform from a fresh
+Debian (Raw-BISOS), and the virtual machines that do it reproducibly. A gitGroup is a collection of
+git repos, independent of the git server that hosts them (here the GitHub organization
+[[https://github.com/bxGenesis][bxGenesis]]); its repos are the ones under
+=/bisos/git/bxRepos/bxGenesis/=. Besides its member repos, each gitGroup has two special ones: =base=
+(this repo), which keeps what is specific to the gitGroup, and =gitGroup=, a symlink to the =.github=
+repo (the organization's profile). The model and its terms are in
+[[https://github.com/bisos-pip/gitist][bisos.gitist]]'s README.
+
+In the hierarchy of gitGroups, bxGenesis sits under =bisos=, which sits under =ByStar=.
+
+This repo holds the gitGroup's consistency rules (its plant), the plans whose work spans several of
+its repos (an AI-Activity), and the fto files that make the gitGroup directory walkable
+(=ftoProc.sh=, =Panel.org=, =_tree_=, =_treeProc_=, =_objectType_=). It is not a package.
+
+* Table of Contents     :TOC:
+- [[#overview][Overview]]
+- [[#the-member-repos][The Member Repos]]
+- [[#the-bxgenesis-gitgroup-plant][The bxGenesis gitGroup Plant]]
+- [[#plans-across-the-repos-the-gitgroup-ai-activity][Plans Across the Repos: the gitGroup AI-Activity]]
+- [[#support][Support]]
+
+* The Member Repos
+
+| Repo           | What it holds                                                                  |
+|----------------+--------------------------------------------------------------------------------|
+| =start=        | =raw-bisos.sh=, the start of the Raw-BISOS chain from a fresh Debian           |
+| =provisioners= | stage 2 of the chain: the provisioning scripts (=bisosProvisioners.sh=, ...)  |
+| =fbxoPkgs=     | installing foreign ByStar object packages                                      |
+| =vagrants=     | Vagrantfiles, by distribution, version and type, for building platforms on VMs |
+| =vagrantBue=   | the Vagrant setup of a BISOS user environment                                  |
+| =overview=     | the older overview repo; no longer cloned by new installs (gitist step 2)       |
+| =base=         | this repo                                                                       |
+
+The chain itself (its stages, which repo runs each, how a change is absorbed into it) is described
+in =start='s own AI-Activity (the =bisos-genesis= type).
+
+* The bxGenesis gitGroup Plant
+
+=py3/bin/bxGenesis_gitGroup.spcs= is spread-planted on bisos.gitist's =gitGroup-seed.cs=: the
+gitGroup's name and directory come from where the file really lives (the directory: this repo's
+parent; every git repo there is a member; the name: =bxGenesis=), so it declares only the rules. It
+is on PATH through a symlink in =/bisos/core/bsip/bin/= (the bsip4 repo).
+
+| Rule             | Every member repo                                    |
+|------------------+------------------------------------------------------|
+| =.gitignore=     | equals the BISOS template (=gitignore/emacs+py+tex=) |
+| =.gitattributes= | equals the BISOS template (=gitattributes/py=)       |
+
+No member is a pip package, so there is no rule for generated files. The templates are under
+=/bisos/apps/defaults/begin/templates/moded/git/=.
+
+#+begin_src bash
+bxGenesis_gitGroup.spcs -i gitGroup_members                       # the member repos
+bxGenesis_gitGroup.spcs -i gitGroup_status                        # read-only: each member, each rule
+bxGenesis_gitGroup.spcs -i gitGroup_diff <repo> .gitignore        # template -> the member's file
+bxGenesis_gitGroup.spcs -i gitGroup_update                        # writes missing and stale files
+bxGenesis_gitGroup.spcs -i gitGroup_update --replaceDrift=true    # and drifted ones
+bxGenesis_gitGroup.spcs -i gitGroup_cachedListUpdate              # /bisos/var/gitGroup/bxGenesis/
+#+end_src
+
+The update writes files only; it never stages or commits. The cached list feeds Blee's "Apps ->
+GitHub MAGIT Menu -> BISOS-Magit gitGroups".
+
+* Plans Across the Repos: the gitGroup AI-Activity
+
+This repo is an AI-Activity of the =gitGroup= type: its =AI-WorkPlan.org= holds the stages whose
+work spans several repos --- of this gitGroup, or reaching into others (bisos.common, bsip4,
+bisos.gitist) --- each with the repos it touches and their release order. Stage 2 there makes new
+Raw-BISOS installs clone every gitGroup as a plain directory, with =base= and =.github= as members
+and the =gitGroup= link, and without the overview repos.
+
+* Support
+
+For support, criticism, comments and questions; please contact the
+author/maintainer\\
+[[http://mohsen.1.banan.byname.net][Mohsen Banan]] at:
+[[http://mohsen.1.banan.byname.net/contact]]

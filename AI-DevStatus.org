@@ -1,0 +1,68 @@
+#+title: Development Status & Continuation Handoff
+#+TAGS: me ai aiAndMe
+
+# Provenance (installed once by aiActivity.cs --- not regenerated):
+#   Date:      2026-11-22T20:36:54+00:00
+#   User:      bystar
+#   Templates: /bisos/apps/defaults/ai-templates
+#   Command:   /bisos/venv/py3/devbin/aiActivity.cs -i initiate --activity=gitGroup
+
+####+BEGIN: b:ai:file/particulars
+* AI Working Context
+  Working Directory: /bisos/git/auth/bxRepos/bxGenesis/base
+  File: /bisos/git/auth/bxRepos/bxGenesis/base/AI-DevStatus.org
+  Activity: gitGroup
+  Companion Docs: AI-WORKFLOW.org, AI-Activity.org, AI-DevStatus.org
+####+END:
+
+This file is a working-state handoff so development can continue on another
+machine (which has this repo but NOT the developer's =~=). It captures the
+architecture, what works, what is untested and the design decisions made so far.
+
+This file is maintained by Claude. Updates are typically triggered by the
+=/bx-status-update= slash command, after major interactions, or before a release.
+
+* Current State
+As of 2026-11-23. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activity since
+2026-11-22 (its first). Two things:
+- *The gitGroup plant* =py3/bin/bxGenesis_gitGroup.spcs= (2026-11-22), on PATH through
+  =/bisos/core/bsip/bin/bxGenesis_gitGroup.spcs= (bisos/bsip4). =gitGroup_status=: 7 members;
+  =.gitignore= drift 6, missing 1 (=start=); =.gitattributes= missing 2 (=base=, =start=). Not updated yet: the user's
+  call (=gitGroup_update --replaceDrift=true= recommended).
+- *Stage 2 (AI-WorkPlan.org): the clone registry for the gitGroup model*, for new Raw-BISOS installs.
+  2.1 planned and decided; 2.2 implemented in bisos-pip/common (=baseDirBxRepos.py=) and bisos/bsip4
+  (=bxRepos-gitist.pcs=), uncommitted, tested here on scratch clones. Left, the user's: commit, release
+  bisos.common, a VM run, then delete the overview repos on GitHub.
+
+* Architecture
+- Members: =base=, =fbxoPkgs=, =overview=, =provisioners=, =start= (=raw-bisos.sh=, the =bisos-genesis=
+  activity), =vagrantBue=, =vagrants=. On this platform the =bxGenesis/= directory is itself a clone of
+  =bxGenesis/base= (the old layout); a fresh install after Stage 2 has a plain directory.
+- The plant: spread-planted on bisos.gitist's =gitGroup-seed.cs=; rules =.gitignore= from
+  =emacs+py+tex=, =.gitattributes= from =py=; no =notTracked= (no member is a pip package).
+
+* What Works
+- The plant from PATH: =gitGroup_members= (7), =gitGroup_status= (read-only).
+- Stage 2.2 on scratch clones (editable bisos.common in =dev-bisos3=, =--vcMode=anon=): plain gitGroup
+  directories with =base=, =.github= and =gitGroup -> .github=; a plant resolves its gitGroup there.
+
+* What Is Untested
+- Stage 2 in a real install (a VM). The plant on a fresh platform: =bxGenesis/base= is cloned only
+  after Stage 2 is released; bisos.gitist with =gitGroup-seed.cs= is not on PyPI yet (0.13).
+
+* Key Design Decisions
+- =emacs+py+tex= for =.gitignore=, not =emacs+py=: it keeps =*_archive= (=AI-WorkPlan.org_archive=) and
+  does not ignore =lib/=, which =provisioners= tracks (=lib/bash/=).
+- Stage 2 decisions (2.1): the fto files of a gitGroup directory are deferred (to be done
+  differently); existing platforms are not converted --- a platform is updated by re-installing it
+  and re-running its CBMs, so the old layout phases out; =bisos-web= and =cliGui= stay without =base=.
+- The gitGroup link is relative (=command()= with =ln -sfn=), because the pbd's =symLink()= always
+  makes an absolute one.
+
+Pointers: the gitGroup model is bisos.gitist's =README.org= and =DESIGN.org= (Step 2, of which Stage 2
+is the layout part); pointers to Stage 2 are in =bisos-pip/base= 6.2, =blee/base= 3.2, bsip4's
+AI-DevStatus.org and gitist DESIGN.org "Known Problems Now".
+
+# Local Variables:
+# eval: (setq-local toc-org-max-depth 4)
+# End:
