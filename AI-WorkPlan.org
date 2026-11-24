@@ -12,16 +12,19 @@
 
 ####+BEGIN: b:ai:workflow/driver
 *  [[elisp:(revert-buffer)][revert-buffer]] | [[elisp:(toggle-read-only)][read/wr]] | [[elisp:(show-all)][Show-All]]  [[elisp:(org-shifttab)][Overview]]  [[elisp:(progn (org-shifttab) (org-content))][Content]] | [[elisp:(delete-other-windows)][(1)]] | [[elisp:(progn (save-buffer) (kill-buffer))][S&Q]] [[elisp:(save-buffer)][Save]] [[elisp:(kill-buffer)][Quit]] [[elisp:(bury-buffer)][Bury]] [[elisp:(magit)][Magit]]
-*  [[elisp:(org-cycle)][AI Workflow Driver :: /bx- commands]]    *After |S|: submitted*
-  newStart :: [[elisp:(blee:bnsm:panel-goto "/bisos/panels/bisos-core/bisos-pip/bisos.aiActivity/newStart/_nodeBase_")][Panel]] | [[bashRun:vscodeClaude-assemble.cs -i fullCheck][setup-check]] | [[bashRun:vscodeClaude-assemble.cs -i fullUpdate][setup]] | [[elisp:(b:vscode/init)][partner-init]] | [[elisp:(b:vscode/partnerShow)][partner-show]] | [[aiActivity:session-start][session-start]]
-  VS Code  :: [[elisp:(b:vscode/fileOpen)][Visit]] | [[elisp:(b:vscode/rootOpen)][root-window]] | [[elisp:(b:vscode:claude/dispatch)][Transient]]
-  Session  :: [[elisp:(b:vscode:claude/sessionSelect)][select-session]] | [[aiActivity:session-start][session-start]] | [[aiActivity:session-report][session-report]]  *|S|*  [[aiActivity:S=session-start][session-start]]
-  Activity :: [[aiActivity:activity-reach][activity-reach]] | [[aiActivity:activity-report][activity-report]]  *|S|*  [[aiActivity:S=activity-reach][activity-reach]]
-  Read     :: [[aiActivity:status-read][status-read]] | [[aiActivity:archive-read][archive-read]] | [[aiActivity:ai-outputs][ai-outputs]]  *|S|*  [[aiActivity:S=status-read][status-read]] | [[aiActivity:S=archive-read][archive-read]] | [[aiActivity:S=ai-outputs][ai-outputs]]
-  Work     :: [[aiActivity:todo-do][todo-do]] | [[aiActivity:todo-done][todo-done]]  *|S|*  [[aiActivity:S=todo-do][todo-do]] | [[aiActivity:S=todo-done][todo-done]]
-  Record   :: [[aiActivity:status-update][status-update]] | [[aiActivity:archive-update][archive-update]]  *|S|*  [[aiActivity:S=status-update][status-update]] | [[aiActivity:S=archive-update][archive-update]]
-  Git      :: [[aiActivity:git-commit-msg][git-commit-msg]] | [[aiActivity:git-commit-walk][git-commit-walk]]  *|S|*  [[aiActivity:S=git-commit-msg][git-commit-msg]]
-  Close    :: [[aiActivity:git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:session-verify][session-verify]]  *|S|*  [[aiActivity:S=git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:S=session-verify][session-verify]]
+*  [[elisp:(org-cycle)][AI Workflow Driver :: /bx- commands]]  --  *|E|* Emacs  *|V|* VS Code  *|P|* prompt  *|S|* submitted
+  State     :: (Refresh, on the Info line, shows the session)
+  Info      :: *|E|* [[elisp:(b:ai:workflow/driver/refresh)][Refresh]] | [[elisp:(blee:bnsm:panel-goto "/bisos/panels/bisos-core/bisos-pip/bisos.aiActivity/newStart/_nodeBase_")][Panel]] | [[elisp:(b:vscode:claude/dispatch)][Transient]] | [[elisp:(b:vscode/partnerShow)][partner-show]] | [[file:/bisos/git/bxRepos/blee/vscode-claude/README.org][vscode-claude-README]] | [[file:/bisos/git/bxRepos/bisos-pip/aiActivity/README.org][aiActivity-README]]
+  newStart  :: *|E|* [[bashRun:vscodeClaude-assemble.cs -i fullCheck][setup-check]] | [[bashRun:vscodeClaude-assemble.cs -i fullUpdate][setup]] | [[elisp:(b:vscode/init)][partner-init]]  *|P|* [[aiActivity:session-start][session-start]]  *|S|* [[aiActivity:S=session-start][session-start]]
+  VS Code   :: *|V|* [[elisp:(b:vscode/fileOpen)][Visit]] | [[elisp:(b:vscode/rootOpen)][root-window]]   <- Ctrl+K Ctrl+E: this file in Blee, at its line
+  Session   :: *|E|* [[elisp:(b:vscode:claude/sessionSelect)][select-session]]  *|P|* [[aiActivity:session-start][session-start]] | [[aiActivity:session-report][session-report]]  *|S|* [[aiActivity:S=session-start][session-start]]
+  Activity  :: *|P|* [[aiActivity:activity-reach][activity-reach]] | [[aiActivity:activity-report][activity-report]]  *|S|* [[aiActivity:S=activity-reach][activity-reach]]
+  Read      :: *|P|* [[aiActivity:status-read][status-read]] | [[aiActivity:archive-read][archive-read]] | [[aiActivity:ai-outputs][ai-outputs]]  *|S|* [[aiActivity:S=status-read][status-read]] | [[aiActivity:S=archive-read][archive-read]] | [[aiActivity:S=ai-outputs][ai-outputs]]
+  Work      :: *|P|* [[aiActivity:todo-do][todo-do]] | [[aiActivity:todo-done][todo-done]]  *|S|* [[aiActivity:S=todo-do][todo-do]] | [[aiActivity:S=todo-done][todo-done]]
+  Record    :: *|P|* [[aiActivity:status-update][status-update]] | [[aiActivity:archive-update][archive-update]] | [[aiActivity:context-trim][context-trim]]  *|S|* [[aiActivity:S=status-update][status-update]] | [[aiActivity:S=archive-update][archive-update]]
+  Git       :: *|P|* [[aiActivity:git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:git-commit-msg][git-commit-msg]]  *|S|* [[aiActivity:S=git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:S=git-commit-msg][git-commit-msg]]
+  Close     :: *|P|* [[aiActivity:session-verify][session-verify]] | [[aiActivity:skills-improve][skills-improve]]  *|S|* [[aiActivity:S=git-commit-walk][git-commit-walk]] | [[aiActivity:S=git-pull-list-add][git-pull-list-add]]
+  newResume :: *|E|* [[bashRun:git -C /bxRepos/blee-binders/evolution pull --rebase][outputs-pull]] | [[elisp:(b:ai:workflow/driver/pullListVisit)][pull-list]] | [[bashRun:pipPkgsStatus.cs -i pkgsStatus][pipPkgsStatus]]  *|P|* [[aiActivity:newResume-confirm][newResume-confirm]]  *|S|* [[aiActivity:S=newResume-confirm][newResume-confirm]]
 
 ####+END:
 
@@ -81,7 +84,7 @@ Goal: A placeholder for misc ideas and TODOs
 ** -
 
 
-* Stage 2: Update bx-baseDirs to conform the new model of gitGroup
+* Stage 2: Modernize gitGroup's base model. Base carries gitGroup's profile. overview repos are obsolted 
 
 <<Stage 2>>
 
@@ -101,155 +104,181 @@ Exclude the following for everyth gitGroup:
 
 * Stage 2 TODOs  -- In Progress
 ** +
-** TODO [#A] <<2.1>> Produce a plan for implementation of [[Stage 2]] :aiAndMe:
-SCHEDULED: <2026-11-22 Sun 21:22>
-:PROPERTIES:
-:ORIGIN: Mohsen
-:IMPORTANCE: Medium
-:REPO: this
-:BASE: this
-:FOUND: <2026-10-01 Thu 10:32>
-:END:
-List which gitGroups will be edited in which files.
------ Results: ------
-
-*Review of Stage 2.* Excluding "the renaming of the cloned base repo to the gitGroup's name" means
-=gitCloneBase= is no longer used for a gitGroup: the gitGroup directory becomes a plain directory,
-and =base= and =.github= are cloned into it as members. That is the "Layout" bullet of gitist
-DESIGN.org Step 2, done now in bisos.common as an interim; the rest of Step 2 (the gitGroupsSet
-registry, =gitistGroup.cs=) is not part of this stage.
-
-*** The gitGroups (GitHub checked 2026-11-22 with =git ls-remote=)
-
-| gitGroup      | Server name   | Cloned by          | Dir today cloned from | base | .github | gitGroup link | overview line dropped     |
-|---------------+---------------+--------------------+-----------------------+------+---------+---------------+---------------------------|
-| ByStar        | ByStar        | bisos.common       | ByStar/base           | yes  | yes     | yes           | ByStar/overview           |
-| bisos         | bisos         | bisos.common       | bisos/base            | yes  | yes     | yes           | bisos/overview            |
-| bxObjects     | bxObjects     | bisos.common       | bxObjects/base        | yes  | yes     | yes           | bxObjects/overview        |
-| bisos-web     | bisos-web     | bisos.common       | bisos-web/.github     | --   | yes     | yes           | (none)                    |
-| blee          | bx-blee       | bisos.common       | bx-blee/base          | yes  | yes     | yes           | blee/overview             |
-| bxGenesis     | bxGenesis     | bisos.common       | bxGenesis/base        | yes  | yes     | yes           | bxGenesis/overview        |
-| bisos-pip     | bisos-pip     | bisos.common       | bisos-pip/.github     | yes  | yes     | yes           | bisos-pip/overview        |
-| blee-binders  | blee-binders  | bisos.common       | blee-binders/base     | yes  | --      | --            | blee-binders/overview     |
-| bxexamples    | bxexamples    | bisos.common       | bxexamples/base       | yes  | --      | --            | bxexamples/overview       |
-| bxlcnt        | bxlcnt        | bisos.common       | bxlcnt/base           | yes  | --      | --            | bxlcnt/overview           |
-| mb-ephemera   | mb-ephemera   | bxRepos-gitist.pcs | (plain already)       | yes  | --      | --            | (not cloned)              |
-| rePublication | rePublication | bxRepos-gitist.pcs | (plain already)       | yes  | --      | --            | (not cloned)              |
-| cliGui        | cliGui        | bxRepos-gitist.pcs | (plain already)       | --   | --      | --            | (not cloned)              |
-
-=bisos-web= and =cliGui= have no =base= repo on GitHub, so "a base repo for every gitGroup" cannot
-be met for them until one is created (the user's step); they get what exists.
-
-*** Files and edits
-
-| Order | Repo             | File                                 | Edit                                                       | Reaches a fresh install by |
-|-------+------------------+--------------------------------------+------------------------------------------------------------+----------------------------|
-| 1     | bisos-pip/common | =py3/bisos/common/baseDirBxRepos.py= | =pbdDict_bxReposRoot=: the 10 gitGroups cloned by bisos.common | a bisos.common release     |
-| 2     | bisos/bsip4      | =bin/bxRepos-gitist.pcs=             | =reposList=: add =mb-ephemera/base=, =rePublication/base=  | git (bsip4 is cloned)      |
-
-1. *=baseDirBxRepos.py=, =pbdDict_bxReposRoot= only* (its body, outside the dblocks):
-   - A local helper beside =gitClone=, e.g.
-     =gitGroupDir(locName, srvName, withBase=True, withDotGithub=True)=: =directory(locName)=;
-     =gitClone(f"{locName}/base", f"{srvName}/base")=; =gitClone(f"{locName}/.github", f"{srvName}/.github")=;
-     and =command(f"{locName}/gitGroup", f"cd {root}/{locName} && ln -sfn .github gitGroup")=.
-     The link is made with =command()= because =symLink()= always makes an absolute link
-     (=srcFullPathObtain= joins the root), and the model's link is the relative =gitGroup -> .github=.
-     =gitClone= already handles a local name that differs from the server's (=blee= <- =bx-blee=).
-   - Replace each of the 10 =gitCloneBase('<group>', ...)= lines by =gitGroupDir(...)=, with
-     =withBase=False= for =bisos-web= and =withDotGithub=False= for =blee-binders=, =bxexamples=, =bxlcnt=.
-   - Delete the 9 overview =gitClone= lines.
-   - Unchanged: the other =gitClone= lines; the =gitCloneBase= of
-     =bisos-pip/bootstrap/dev/bisos/bootstrap-vagrants= (a repo under another name, not a gitGroup);
-     =pbdDict_bxReposCollection= (=bxRepos= itself from =ByStar/bxReposBase=, not a gitGroup) and
-     =pbdDict_extRepos=; and =gitCloneBase= itself, kept for that one use.
-2. *=bxRepos-gitist.pcs=*: two lines in =reposList=. No gitGroup there has a =.github=.
-
-*** Decisions needed before 2.2
-
-- *D1. The fto files of the gitGroup directory.* Today =_tree_= (=auxNode=), =_treeProc_=,
-  =ftoProc.sh= and =_objectType_= sit in the gitGroup directory because the repo cloned as that
-  directory carries them (both =<group>/base= and =bisos-pip/.github= track them). A plain directory has
-  none, so an =seedFtoCommon.sh= walk of =/bisos/git/bxRepos= stops at the gitGroup level. Options:
-  (a) accept it for now, (b) link them from =base= (=_tree_ -> base/_tree_=, ...), (c) have the
-  gitGroup plant create them. Recommended: (a), after checking in 2.2 that nothing in the raw chain
-  walks =/bisos/git/bxRepos=; the gitist/fileObj walkers are meant to replace these.
-- *D2. Existing platforms (old layout).* Running the new pbd on one (=pltfrmDevelBecome.sh=,
-  =bisosBaseDirs.sh -i bxGitReposBasesReClone=): the =directory= step is skipped (it exists); =base=
-  and =.github= are cloned *inside* the old clone, as untracked directories (=bisos-pip/base= and
-  =blee/base= are already like that here); =bisos-pip/.github= becomes a second clone of the repo the
-  directory already is. Recommended: accept it for this stage, and add a separate TODO to migrate an
-  existing platform's gitGroup directories to the plain layout.
-- *D3. bisos-web and cliGui without base.* Create =bisos-web/base= and =cliGui/base= on GitHub (the
-  user's), or leave them baseless for now. Recommended: leave them until they need a plant.
-
-*** Decided (2026-11-22)
-
-- D1: the gitGroup directory's fto files will be done differently; deferred.
-- D2: no conversion of existing platforms. The target is that a platform is updated by
-  re-installing it and re-running its CBMs, so old-layout platforms phase out; this stage makes that
-  re-install reliable. An existing platform keeps working, inconsistent with a fresh one; re-running
-  the registry on it nests =base= / =.github= clones inside the old clone (harmless, untracked).
-  On a fresh install, every gitGroup directory --- =bisos-pip= included --- is a plain directory.
-- D3: =bisos-web= and =cliGui= stay without =base=.
-
-*** Verification (in 2.2)
-
-- Here, against the editable bisos.common of =dev-bisos3= (no release needed), into a scratch
-  =--baseDir=, =--vcMode=anon=: =bx-gitReposBases -i pbdShow --pbdName=bxReposRoot all= (no overview
-  key left; each gitGroup's =base=, =.github= and =gitGroup= keys present), then =pbdUpdate= for a subset
-  of keys (=blee blee/base blee/.github blee/gitGroup bisos-pip ...=, not =all=: about 120 clones), then
-  check =<scratch>/<group>/gitGroup -> .github= and that the three plants resolve under the scratch tree.
-- Then bisos.common released (the user's), and a Raw-BISOS run on a VM.
-- Only after that: delete the overview repos on GitHub (the user's), and point
-  =bisos-pip/base= TODO 6.2, =blee/base= TODO 3.2 and gitist DESIGN.org "Known Problems Now" here.
-
-** TODO [#A] <<2.2>> Implement [[2.1  ]]:aiAndMe:
-SCHEDULED: <2026-11-22 Sun 21:22>
-:PROPERTIES:
-:ORIGIN: Mohsen
-:IMPORTANCE: Medium
-:REPO: this
-:BASE: this
-:FOUND: <2026-10-01 Thu 10:32>
-:END:
------ Results: ------
-
-Implemented as planned in 2.1, in two repos (uncommitted):
-
-| Repo             | File                                 | Change                                                                 |
-|------------------+--------------------------------------+------------------------------------------------------------------------|
-| bisos-pip/common | =py3/bisos/common/baseDirBxRepos.py= | =pbdDict_bxReposRoot=: new local =gitGroupDir()=; the 10 gitGroup =gitCloneBase= lines replaced by it; the 9 overview lines deleted |
-| bisos/bsip4      | =bin/bxRepos-gitist.pcs=             | =reposList=: =mb-ephemera/base=, =rePublication/base=                  |
-
-=gitGroupDir(locName, srvName, vcMode, withBase=True, withDotGithub=True)=: =directory(locName)=,
-=gitClone= of =base= and =.github=, and =command()= for =ln -sfn .github gitGroup= (relative).
-
-*Verified here* (editable bisos.common in =dev-bisos3=, scratch base directory, =--vcMode=anon=):
-- The pbd has 187 keys, none with =overview=; each gitGroup has its directory key, then =base=,
-  =.github= and =gitGroup= keys as GitHub allows (=bisos-web= without =base=; =blee-binders=,
-  =bxexamples=, =bxlcnt= without =.github= and link).
-- =bx-gitReposBases -i pbdUpdate= on =bisos-pip=, =blee=, =bxGenesis=, =blee-binders=, =bisos-web=
-  (and their member keys), rc 0: each gitGroup directory is a plain directory (no =.git=); =base= and
-  =.github= are clones of the right server repos (=blee/base= from =bx-blee/base=); =gitGroup -> .github=.
-- A re-run: =git clone= prints "already exists" for =base= and =.github= (as every existing
-  =gitClone= does today), the link is unchanged.
-- The =blee= plant cloned into the scratch tree resolves its gitGroup there: =gitGroup_members= gives
-  =.github= and =base= (the =gitGroup= link is not a member). The =bxGenesis= plant is not on
-  GitHub yet (uncommitted), so it was not in the scratch clone.
-- No code reaches a file of the old repo-as-directory through the gitGroup path: grep of
-  bsip4, bxGenesis, blee and bisos-pip (=*.sh=, =*.py=, =*.cs=, =*.pcs=, =*.spcs=, =*.el=, =*.bash=)
-  for =bxRepos/<group>/<top-level file of that repo>=. The only hits are the =This File= comments
-  of =ftoProc.sh= (D1, deferred).
-
-*Not done here --- the user's, in order:*
-1. Commit and push =bisos-pip/common=, =bisos/bsip4= (and =bxGenesis/base= for its plant).
-2. Release bisos.common (=bisos-pip-release=; PyPI is at 1.15).
-3. Raw-BISOS on a VM: every gitGroup directory plain, the three plants on PATH resolve.
-4. Then delete the overview repos on GitHub, and point =bisos-pip/base= TODO 6.2, =blee/base=
-   TODO 3.2 and gitist DESIGN.org "Known Problems Now" to this stage.
-
 ** -
 
+* Stage 3: On VM, RawBISOS Container Re-Build Glitches
+
+<<Stage 3>>
+
+Goal: After Each Rebuild of RawBisos on the VM, improve the container rebuild by identifying and fixing problems.
+
+This is meant to be a repeated LOOP
+
+
+
+
+* Stage 3 TODOs  -- In Progress
+** +
+** TODO [#A] <<3.1>> 261123 Container Creation Success and Failures  :aiAndMe:
+SCHEDULED: <2026-11-23 Mon 19:52>
+Success:
+  - The overview repos are no longer installed
+  - base repos are created.
+  - .github repos are there with their gitGroup symlinks
+  - The gitGroups are ordinary directories.
+  So, [[Stage 2]] has been implemented, can be marked as done and archived.
+Failures:
+  - [[3.1.1]]  -- The VNC passwords are not in effect, likely old images and config
+  - [[3.1.2]]  -- The rawBisosCBM has a number of problems that have been captured in:
+    /bxRepos/mb-ephemera/pub-shuttle/tmp/CBMs-install-261123.out
+----- Results: ------
+
+** TODO [#A] <<3.1.1>> VNC Password Activation Details and Verification :aiAndMe:
+SCHEDULED: <2026-11-23 Mon 19:52>
+Confirm that the right place to continue this work is at: /bxRepos/bxObjects/bro_dockerfiles/
+The VNC passwords are not in effect, likely old images and config
+  - Which images are to be rebuilt?
+  - How can mass rebuiling of images be automated
+  - How is the password modified, etc? These are documented. We need to verify that documentation is in the right place with good visibility
+----- Results: ------
+
+*Where.* Yes: =bxObjects/bro_dockerfiles= (the images, =containerManage.sh=), and
+=bisos-pip/dockerProc= (=containerProc_instanceVncPassword=, the BISOS way). Documented in
+bro_dockerfiles' =README.org= ("VNC password (optional)"); its AI-DevStatus lists VNC passwords as
+untested on a daemon --- this VM run is the first.
+
+*How it works.* No password is the default. =set= asks twice, makes the password file with the
+image's own =vncpasswd -f= in a *throw-away container of the image* (never in the running instance;
+the password on stdin), =docker cp='s it into the instance as =/home/bystar/.config/bisosVncPasswd=,
+and restarts a running instance. At each VNC start =/usr/local/bin/vncStart.sh= makes the file
+bystar's (0600) and runs =vncserver -SecurityTypes VncAuth -rfbauth= (empty or missing file: none).
+Lost on =delete=.
+
+*Cause found (on the VM, 2026-11-23).* "vncpasswd produced no output": =which -a vncpasswd= is empty
+in the container. The confined Dockerfiles install =tigervnc-standalone-server tigervnc-common= with
+=--no-install-recommends=; =vncpasswd= is in =tigervnc-tools=. Installing it in the running instance
+does not help, since =set= runs the image, not the instance.
+
+*Fixed (committed: bro_dockerfiles =f74525b=, dockerProc =045ac32=; not yet built):*
+- bro_dockerfiles: =tigervnc-tools= in the VNC install of =bisos_deb13-fresh= and =bisos_deb12-fresh=
+  (the other five images are =FROM= them); =containerManage.sh= (all 7, still byte-identical):
+  a failed =vncpasswd= now says so and names the rebuild; README: images built before 2026-11-24 must
+  be rebuilt. =hubTag= not bumped (the user's, at upload).
+- bisos-pip/dockerProc =containerProc_csu.py=: the message keeps the engine's rc and stderr (it hid
+  "executable file not found") and names the rebuild.
+
+*Which images to rebuild:* all of them, confined base first --- on the VM =bisos_deb13-fresh=, then
+=bisos_deb13-sysd= (and any other in use); then =instanceDelete= + =instanceUp=. *Mass rebuild:* the
+walk from =debian/13/ftoBranchProc.spcs= (README, "Walking the Tree: Lifecycle Verbs"), confined,
+privileged, rootless-sysd in order.
+
+*Left, on the VM:* rebuild, re-create, =set=, then a VNC viewer and noVNC ask for the password;
+=clear=; survives restart; lost on delete. Then mark DONE.
+
+** TODO [#A] <<3.1.2>> Get rawBisosCBM to run end-to-end relaibly :aiAndMe:
+SCHEDULED: <2026-11-23 Mon 19:52>
+Confirm that the right place to continue this work is at: //bxRepos/bisos-pip/capability/
+The 261123 logs are at: /bxRepos/mb-ephemera/pub-shuttle/tmp/CBMs-install-261123.out
+- Each CBM requires installation of various pip packages. This is separate from th package's sbom. Where should that go?
+- The cbmProc.status is ending up in the wrong place.
+----- Results: ------
+
+*The log, read (2026-11-24).* Six distinct problems, not one; the walk still reports =failed=0=.
+
+| # | Symptom                                                   | Cause                                                                                   | Fix in            |
+|---+-----------------------------------------------------------+-----------------------------------------------------------------------------------------+-------------------|
+| a | =PermissionError .../<leaf>/cbmProc.status= (all 15)        | =cbmProc.status= tracked in git in =bro_rawBisos= (22 files, the dev host's history), the anon clone not writable; =statusPath()= is =plantDir/cbmProc.status= | capability, bro_rawBisos |
+| b | =kafkaCbs-sbom.pcs: command not found= (and prometheus, grafana, pypiserver, devpi, geneweb), rc 127 | =cbsSpec= is a git path, so the CBS runs from the clone; =bisos.<cap>= is not pip-installed, so its sibling =.pcs= are not on PATH (PyPI 0.1 has them) | the bootstrap sbom (below) |
+| c | =pip install ... Permission denied: /bisos/venv/py3/asc/...= (airflow, psycopg2, asyncpg, django, gunicorn) | package directories in =asc= not writable by bystar; probably installed earlier as root (umask 022). Unverified | the raw chain (=bxGenesis/start=) |
+| d | airflow units: =inBytes arg of as_root_writeToFile is None=   | (c): no =airflow=, so =sysdUnitFileFunc()= is None; =bifSystemd_csu.configFileUpdate= should say so, not raise | debian (minor)    |
+| e | =gatsbyBxSidebar= Error=1, =csPlayerPerf= (no Django)         | (c), and =gatsbyBxSidebar-assemble.cs= exit 1                                           | look again after (c) |
+| f | =fto_forwardToLeaves ... failed=0=                           | a failed Cmnd exits 0                                                                   | bisos-pip/b Stage 4 (on hold for this pipeline) |
+
+Not problems: =policy-rc.d denied= (container), =ALERT: Missing .../currents/fp=, the interleaved output
+(stdout/stderr buffering, not parallel leaves). Each status is printed twice (cosmetic).
+
+*The decision (2026-11-24): a bootstrap sbom per CBM leaf.* Each leaf in a =bro_= repo gets
+=cbmBootstrap-sbom.pcs= (name to confirm; the leaf's directory says which capability), which
+1) pip-installs the CBM's packages and 2) git-clones the CBM's repos. A leaf is then self-contained
+and the CBMs fully distributed: what a capability needs before its CBS can run is in its leaf, not
+in the platform's clone registry.
+
+The leaves, by what their bootstrap does:
+
+| Kind                  | Leaves                                                                 | Bootstrap                                        |
+|-----------------------+------------------------------------------------------------------------+--------------------------------------------------|
+| CBS in a pip package  | nginx, reactPlus (=bisos.webCap=), airflow, kafka, prometheus, grafana, pypiserver, devpi, geneweb | pip =bisos.<cap>= into =bisos3=; =cbsSpec= becomes a basename (PATH) |
+| CBS in a repo         | csPlayerPerf, csPlayerUi, astroStarter, gatsbyBxSidebar (=bisos-web=)    | git clone of the site repo; its pip packages, if any |
+| CBS in the bro_ repo  | platform (=bro_rawBisos/.../web/astro=)                                | none                                             |
+
+Facts that shape it:
+- bisos.sbom has no git kind: =bisos/sbom/reposSeed.py= is an empty stub. =pkgsSeed.setup()= has
+  =aptPkgsList=, =pipPkgsList=, =pipxPkgsList=, =npmPkgsList=, =sbomsList= and =virtenv= (the bootstrap
+  sets =virtenv="/bisos/venv/py3/bisos3"=).
+- =pipPkg_isInstalled= is a substring search of =<virtenv>/bin/pip list=. On a dev host the editable
+  packages are in =dev-bisos3=, not =bisos3=, so the bootstrap installs a PyPI copy into =bisos3= too;
+  =dev-bisos3= is first on PATH, so the editable one still runs. Accepted; to be checked (3.1.2.3).
+- Seen on the way: =PkgsSeedInfo.__init__= sets =self._pipxPkgsList = pipPkgsList= (=pkgsSeed.py:289=);
+  =setup()= overwrites it, so no effect today. Fix in 3.1.2.1.
+
+*The plan* --- a cross-repo stage, in this order:
+
+| Order | Repo                     | Change                                                                 | Released as      | TODO      |
+|-------+--------------------------+------------------------------------------------------------------------+------------------+-----------|
+| 1     | bisos-pip/sbom           | =reposSeed.py=: a =GitRepo= kind and =gitReposList= in =setup()=, cloned by =sbom_fullUpdate= | bisos.sbom       | [[3.1.2.1]] |
+| 2     | bisos-pip/capability     | =cbm_bootstrap= verb; =cbm_materialize= runs it first when the file exists; status out of the leaf (a) | bisos.capability | [[3.1.2.2]] |
+| 3     | bxObjects/bro_rawBisos   | =cbmBootstrap-sbom.pcs= in the 15 leaves; =cbsSpec= basenames; untrack =cbmProc.status= | (git only)       | [[3.1.2.3]] |
+| 4     | bxGenesis/start (raw chain) | =asc= (and =bisos3=) writable by bystar on a fresh install (c)        | (git only)       | [[3.1.2.4]] |
+| 5     | (VM)                     | Raw-BISOS, then =sysCbmFullyMaterialize.sh=; (d) and (e) re-read          | ---              | [[3.1.2.5]] |
+
+Later, not in this stage: bisos.common's clone registry stops cloning the CBM repos (as Stage 2
+did for overview); (d) in bisos-pip/debian; (f) is bisos-pip/b Stage 4.
+
+** TODO [#A] <<3.1.2.1>> bisos.sbom: git repos in an sbom (=reposSeed.py=) :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-pip/sbom
+:END:
+A =GitRepo= (server path, local path under =/bisos/git/<vcMode>/bxRepos/=, the platform's vcMode, as
+bisos.common's =gitClone= does), =gitReposList= in =pkgsSeed.setup()=, cloned by =sbom_fullUpdate=
+(skipped when already cloned), and =gitRepo_isCloned=. Also the =_pipxPkgsList= slip at =pkgsSeed.py:289=.
+----- Results: ------
+
+** TODO [#A] <<3.1.2.2>> bisos.capability: =cbm_bootstrap=, and the status out of the leaf :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-pip/capability
+:END:
+- =cbm_bootstrap=: runs =./cbmBootstrap-sbom.pcs -i sbom_fullUpdate= in the leaf; =cbm_materialize=
+  runs it first when the file exists (one walk verb), and fails the leaf if it fails.
+- (a): =cbmProc.status= not in the leaf directory (it may be a read-only clone): under =/bisos/var/=,
+  keyed by the leaf's path; =cbm_status= reads it there. Decide the place before coding.
+- =cbm-authorship= skill: the bootstrap sbom and the new status place.
+----- Results: ------
+
+** TODO [#A] <<3.1.2.3>> bro_rawBisos: a bootstrap sbom in every CBM leaf :aiAndMe:
+:PROPERTIES:
+:REPO: bxObjects/bro_rawBisos
+:END:
+After 3.1.2.1 and 3.1.2.2 are released. =cbmBootstrap-sbom.pcs= in the 15 =hereWeb= leaves (and the
+=pals= ones), by the table above; =cbsSpec= a basename for the pip kind; =git rm --cached= the 22
+=cbmProc.status= files and ignore them. Check on a dev host that the editable packages still win.
+----- Results: ------
+
+** TODO [#A] <<3.1.2.4>> Raw chain: =asc= writable by bystar on a fresh install :aiAndMe:
+:PROPERTIES:
+:REPO: bxGenesis/start
+:END:
+On the VM first: =ls -l /bisos/venv/py3/asc/lib/python3.13/site-packages/text_unidecode= (owner,
+mode), and find the step that installed into =asc= as root. Then fix that step (install as bystar, or
+group-writable), not the permissions afterwards.
+----- Results: ------
+
+** TODO [#A] <<3.1.2.5>> Verify on the VM: =sysCbmFullyMaterialize.sh= end to end :aiAndMe:
+Raw-BISOS, then =sysCbmFullyMaterialize.sh=: every leaf materialized, no =PermissionError=, no
+=command not found=; then re-read (d) and (e). Until bisos-pip/b Stage 4, read the log, not =failed==.
+----- Results: ------
+
+
+** -
 
 # Local Variables:
 # eval: (setq-local toc-org-max-depth 4)

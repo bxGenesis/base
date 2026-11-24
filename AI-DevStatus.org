@@ -23,16 +23,24 @@ This file is maintained by Claude. Updates are typically triggered by the
 =/bx-status-update= slash command, after major interactions, or before a release.
 
 * Current State
-As of 2026-11-23. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activity since
-2026-11-22 (its first). Two things:
+As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activity since
+2026-11-22 (its first). Three things:
 - *The gitGroup plant* =py3/bin/bxGenesis_gitGroup.spcs= (2026-11-22), on PATH through
   =/bisos/core/bsip/bin/bxGenesis_gitGroup.spcs= (bisos/bsip4). =gitGroup_status=: 7 members;
   =.gitignore= drift 6, missing 1 (=start=); =.gitattributes= missing 2 (=base=, =start=). Not updated yet: the user's
   call (=gitGroup_update --replaceDrift=true= recommended).
-- *Stage 2 (AI-WorkPlan.org): the clone registry for the gitGroup model*, for new Raw-BISOS installs.
-  2.1 planned and decided; 2.2 implemented in bisos-pip/common (=baseDirBxRepos.py=) and bisos/bsip4
-  (=bxRepos-gitist.pcs=), uncommitted, tested here on scratch clones. Left, the user's: commit, release
-  bisos.common, a VM run, then delete the overview repos on GitHub.
+- *Stage 2 (AI-WorkPlan.org): the clone registry for the gitGroup model* --- done: committed
+  (bisos-pip/common =e8a6342=, bisos/bsip4 =31aa9c1=), bisos.common 1.16 on PyPI, and the VM rebuild of
+  2026-11-23 confirmed it (3.1: no overview repos, base and .github cloned, =gitGroup= links, plain
+  gitGroup directories). Left, the user's: mark 2.1/2.2 DONE and archive; delete the overview repos.
+- *Stage 3: VM rebuild glitches* (a LOOP over each Raw-BISOS rebuild on the VM).
+  - 3.1.1 VNC passwords: cause found (no =vncpasswd= in the images: =tigervnc-tools=), fixed in
+    bro_dockerfiles (=f74525b=) and the message in bisos-pip/dockerProc (=045ac32=), not yet built. Left: rebuild
+    and verify on the VM.
+  - 3.1.2 the CBM run: the 261123 log read as six problems (a--f); decided, a per-leaf bootstrap
+    sbom (pip packages + git clones); planned as 3.1.2.1--3.1.2.5 across sbom, capability,
+    bro_rawBisos, the raw chain. Open: the file name (=cbmBootstrap-sbom.pcs=?), where
+    =cbmProc.status= goes. Nothing implemented.
 
 * Architecture
 - Members: =base=, =fbxoPkgs=, =overview=, =provisioners=, =start= (=raw-bisos.sh=, the =bisos-genesis=
@@ -47,8 +55,9 @@ As of 2026-11-23. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   directories with =base=, =.github= and =gitGroup -> .github=; a plant resolves its gitGroup there.
 
 * What Is Untested
-- Stage 2 in a real install (a VM). The plant on a fresh platform: =bxGenesis/base= is cloned only
-  after Stage 2 is released; bisos.gitist with =gitGroup-seed.cs= is not on PyPI yet (0.13).
+- The plant on a fresh platform: bisos.gitist with =gitGroup-seed.cs= is not on PyPI yet (0.13), so
+  =bxGenesis_gitGroup.spcs= does not run there.
+- 3.1.1 on the VM (the rebuilt images, =set= / =clear=); everything in 3.1.2.
 
 * Key Design Decisions
 - =emacs+py+tex= for =.gitignore=, not =emacs+py=: it keeps =*_archive= (=AI-WorkPlan.org_archive=) and
@@ -58,6 +67,10 @@ As of 2026-11-23. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   and re-running its CBMs, so the old layout phases out; =bisos-web= and =cliGui= stay without =base=.
 - The gitGroup link is relative (=command()= with =ln -sfn=), because the pbd's =symLink()= always
   makes an absolute one.
+- 3.1.2 (2026-11-24, user decision): each CBM leaf carries its own bootstrap sbom, so CBMs are
+  self-contained and distributed, not dependent on the platform's clone registry. bisos.sbom has no
+  git kind yet (=reposSeed.py= is a stub). VNC: =vncPassword set= hashes in a throw-away container of
+  the image, so a tool missing there cannot be fixed in the running instance.
 
 Pointers: the gitGroup model is bisos.gitist's =README.org= and =DESIGN.org= (Step 2, of which Stage 2
 is the layout part); pointers to Stage 2 are in =bisos-pip/base= 6.2, =blee/base= 3.2, bsip4's

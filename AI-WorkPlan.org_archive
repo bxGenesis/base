@@ -1,0 +1,165 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /bxRepos/bxGenesis/base/AI-WorkPlan.org
+
+
+* DONE [#A] <<2.1>> Produce a plan for implementation of [[Stage 2]] :aiAndMe:
+CLOSED: [2026-11-24 Tue 00:31] SCHEDULED: <2026-11-22 Sun 21:22>
+:PROPERTIES:
+:ORIGIN: Mohsen
+:IMPORTANCE: Medium
+:REPO: this
+:BASE: this
+:FOUND: <2026-10-01 Thu 10:32>
+:ARCHIVE_TIME: 2026-11-24 Tue 00:31
+:ARCHIVE_FILE: /bxRepos/bxGenesis/base/AI-WorkPlan.org
+:ARCHIVE_OLPATH: Stage 2 TODOs  -- In Progress
+:ARCHIVE_CATEGORY: AI-WorkPlan
+:ARCHIVE_TODO: DONE
+:END:
+List which gitGroups will be edited in which files.
+----- Results: ------
+
+*Review of Stage 2.* Excluding "the renaming of the cloned base repo to the gitGroup's name" means
+=gitCloneBase= is no longer used for a gitGroup: the gitGroup directory becomes a plain directory,
+and =base= and =.github= are cloned into it as members. That is the "Layout" bullet of gitist
+DESIGN.org Step 2, done now in bisos.common as an interim; the rest of Step 2 (the gitGroupsSet
+registry, =gitistGroup.cs=) is not part of this stage.
+
+** The gitGroups (GitHub checked 2026-11-22 with =git ls-remote=)
+
+| gitGroup      | Server name   | Cloned by          | Dir today cloned from | base | .github | gitGroup link | overview line dropped     |
+|---------------+---------------+--------------------+-----------------------+------+---------+---------------+---------------------------|
+| ByStar        | ByStar        | bisos.common       | ByStar/base           | yes  | yes     | yes           | ByStar/overview           |
+| bisos         | bisos         | bisos.common       | bisos/base            | yes  | yes     | yes           | bisos/overview            |
+| bxObjects     | bxObjects     | bisos.common       | bxObjects/base        | yes  | yes     | yes           | bxObjects/overview        |
+| bisos-web     | bisos-web     | bisos.common       | bisos-web/.github     | --   | yes     | yes           | (none)                    |
+| blee          | bx-blee       | bisos.common       | bx-blee/base          | yes  | yes     | yes           | blee/overview             |
+| bxGenesis     | bxGenesis     | bisos.common       | bxGenesis/base        | yes  | yes     | yes           | bxGenesis/overview        |
+| bisos-pip     | bisos-pip     | bisos.common       | bisos-pip/.github     | yes  | yes     | yes           | bisos-pip/overview        |
+| blee-binders  | blee-binders  | bisos.common       | blee-binders/base     | yes  | --      | --            | blee-binders/overview     |
+| bxexamples    | bxexamples    | bisos.common       | bxexamples/base       | yes  | --      | --            | bxexamples/overview       |
+| bxlcnt        | bxlcnt        | bisos.common       | bxlcnt/base           | yes  | --      | --            | bxlcnt/overview           |
+| mb-ephemera   | mb-ephemera   | bxRepos-gitist.pcs | (plain already)       | yes  | --      | --            | (not cloned)              |
+| rePublication | rePublication | bxRepos-gitist.pcs | (plain already)       | yes  | --      | --            | (not cloned)              |
+| cliGui        | cliGui        | bxRepos-gitist.pcs | (plain already)       | --   | --      | --            | (not cloned)              |
+
+=bisos-web= and =cliGui= have no =base= repo on GitHub, so "a base repo for every gitGroup" cannot
+be met for them until one is created (the user's step); they get what exists.
+
+** Files and edits
+
+| Order | Repo             | File                                 | Edit                                                       | Reaches a fresh install by |
+|-------+------------------+--------------------------------------+------------------------------------------------------------+----------------------------|
+| 1     | bisos-pip/common | =py3/bisos/common/baseDirBxRepos.py= | =pbdDict_bxReposRoot=: the 10 gitGroups cloned by bisos.common | a bisos.common release     |
+| 2     | bisos/bsip4      | =bin/bxRepos-gitist.pcs=             | =reposList=: add =mb-ephemera/base=, =rePublication/base=  | git (bsip4 is cloned)      |
+
+1. *=baseDirBxRepos.py=, =pbdDict_bxReposRoot= only* (its body, outside the dblocks):
+   - A local helper beside =gitClone=, e.g.
+     =gitGroupDir(locName, srvName, withBase=True, withDotGithub=True)=: =directory(locName)=;
+     =gitClone(f"{locName}/base", f"{srvName}/base")=; =gitClone(f"{locName}/.github", f"{srvName}/.github")=;
+     and =command(f"{locName}/gitGroup", f"cd {root}/{locName} && ln -sfn .github gitGroup")=.
+     The link is made with =command()= because =symLink()= always makes an absolute link
+     (=srcFullPathObtain= joins the root), and the model's link is the relative =gitGroup -> .github=.
+     =gitClone= already handles a local name that differs from the server's (=blee= <- =bx-blee=).
+   - Replace each of the 10 =gitCloneBase('<group>', ...)= lines by =gitGroupDir(...)=, with
+     =withBase=False= for =bisos-web= and =withDotGithub=False= for =blee-binders=, =bxexamples=, =bxlcnt=.
+   - Delete the 9 overview =gitClone= lines.
+   - Unchanged: the other =gitClone= lines; the =gitCloneBase= of
+     =bisos-pip/bootstrap/dev/bisos/bootstrap-vagrants= (a repo under another name, not a gitGroup);
+     =pbdDict_bxReposCollection= (=bxRepos= itself from =ByStar/bxReposBase=, not a gitGroup) and
+     =pbdDict_extRepos=; and =gitCloneBase= itself, kept for that one use.
+2. *=bxRepos-gitist.pcs=*: two lines in =reposList=. No gitGroup there has a =.github=.
+
+** Decisions needed before 2.2
+
+- *D1. The fto files of the gitGroup directory.* Today =_tree_= (=auxNode=), =_treeProc_=,
+  =ftoProc.sh= and =_objectType_= sit in the gitGroup directory because the repo cloned as that
+  directory carries them (both =<group>/base= and =bisos-pip/.github= track them). A plain directory has
+  none, so an =seedFtoCommon.sh= walk of =/bisos/git/bxRepos= stops at the gitGroup level. Options:
+  (a) accept it for now, (b) link them from =base= (=_tree_ -> base/_tree_=, ...), (c) have the
+  gitGroup plant create them. Recommended: (a), after checking in 2.2 that nothing in the raw chain
+  walks =/bisos/git/bxRepos=; the gitist/fileObj walkers are meant to replace these.
+- *D2. Existing platforms (old layout).* Running the new pbd on one (=pltfrmDevelBecome.sh=,
+  =bisosBaseDirs.sh -i bxGitReposBasesReClone=): the =directory= step is skipped (it exists); =base=
+  and =.github= are cloned *inside* the old clone, as untracked directories (=bisos-pip/base= and
+  =blee/base= are already like that here); =bisos-pip/.github= becomes a second clone of the repo the
+  directory already is. Recommended: accept it for this stage, and add a separate TODO to migrate an
+  existing platform's gitGroup directories to the plain layout.
+- *D3. bisos-web and cliGui without base.* Create =bisos-web/base= and =cliGui/base= on GitHub (the
+  user's), or leave them baseless for now. Recommended: leave them until they need a plant.
+
+** Decided (2026-11-22)
+
+- D1: the gitGroup directory's fto files will be done differently; deferred.
+- D2: no conversion of existing platforms. The target is that a platform is updated by
+  re-installing it and re-running its CBMs, so old-layout platforms phase out; this stage makes that
+  re-install reliable. An existing platform keeps working, inconsistent with a fresh one; re-running
+  the registry on it nests =base= / =.github= clones inside the old clone (harmless, untracked).
+  On a fresh install, every gitGroup directory --- =bisos-pip= included --- is a plain directory.
+- D3: =bisos-web= and =cliGui= stay without =base=.
+
+** Verification (in 2.2)
+
+- Here, against the editable bisos.common of =dev-bisos3= (no release needed), into a scratch
+  =--baseDir=, =--vcMode=anon=: =bx-gitReposBases -i pbdShow --pbdName=bxReposRoot all= (no overview
+  key left; each gitGroup's =base=, =.github= and =gitGroup= keys present), then =pbdUpdate= for a subset
+  of keys (=blee blee/base blee/.github blee/gitGroup bisos-pip ...=, not =all=: about 120 clones), then
+  check =<scratch>/<group>/gitGroup -> .github= and that the three plants resolve under the scratch tree.
+- Then bisos.common released (the user's), and a Raw-BISOS run on a VM.
+- Only after that: delete the overview repos on GitHub (the user's), and point
+  =bisos-pip/base= TODO 6.2, =blee/base= TODO 3.2 and gitist DESIGN.org "Known Problems Now" here.
+
+
+* DONE [#A] <<2.2>> Implement [[2.1  ]]:aiAndMe:
+CLOSED: [2026-11-24 Tue 00:31] SCHEDULED: <2026-11-22 Sun 21:22>
+:PROPERTIES:
+:ORIGIN: Mohsen
+:IMPORTANCE: Medium
+:REPO: this
+:BASE: this
+:FOUND: <2026-10-01 Thu 10:32>
+:ARCHIVE_TIME: 2026-11-24 Tue 00:31
+:ARCHIVE_FILE: /bxRepos/bxGenesis/base/AI-WorkPlan.org
+:ARCHIVE_OLPATH: Stage 2 TODOs  -- In Progress
+:ARCHIVE_CATEGORY: AI-WorkPlan
+:ARCHIVE_TODO: DONE
+:END:
+----- Results: ------
+
+Implemented as planned in 2.1, in two repos (committed: bisos-pip/common =e8a6342=, bisos/bsip4 =31aa9c1=):
+
+| Repo             | File                                 | Change                                                                 |
+|------------------+--------------------------------------+------------------------------------------------------------------------|
+| bisos-pip/common | =py3/bisos/common/baseDirBxRepos.py= | =pbdDict_bxReposRoot=: new local =gitGroupDir()=; the 10 gitGroup =gitCloneBase= lines replaced by it; the 9 overview lines deleted |
+| bisos/bsip4      | =bin/bxRepos-gitist.pcs=             | =reposList=: =mb-ephemera/base=, =rePublication/base=                  |
+
+=gitGroupDir(locName, srvName, vcMode, withBase=True, withDotGithub=True)=: =directory(locName)=,
+=gitClone= of =base= and =.github=, and =command()= for =ln -sfn .github gitGroup= (relative).
+
+*Verified here* (editable bisos.common in =dev-bisos3=, scratch base directory, =--vcMode=anon=):
+- The pbd has 187 keys, none with =overview=; each gitGroup has its directory key, then =base=,
+  =.github= and =gitGroup= keys as GitHub allows (=bisos-web= without =base=; =blee-binders=,
+  =bxexamples=, =bxlcnt= without =.github= and link).
+- =bx-gitReposBases -i pbdUpdate= on =bisos-pip=, =blee=, =bxGenesis=, =blee-binders=, =bisos-web=
+  (and their member keys), rc 0: each gitGroup directory is a plain directory (no =.git=); =base= and
+  =.github= are clones of the right server repos (=blee/base= from =bx-blee/base=); =gitGroup -> .github=.
+- A re-run: =git clone= prints "already exists" for =base= and =.github= (as every existing
+  =gitClone= does today), the link is unchanged.
+- The =blee= plant cloned into the scratch tree resolves its gitGroup there: =gitGroup_members= gives
+  =.github= and =base= (the =gitGroup= link is not a member). The =bxGenesis= plant is not on
+  GitHub yet (uncommitted), so it was not in the scratch clone.
+- No code reaches a file of the old repo-as-directory through the gitGroup path: grep of
+  bsip4, bxGenesis, blee and bisos-pip (=*.sh=, =*.py=, =*.cs=, =*.pcs=, =*.spcs=, =*.el=, =*.bash=)
+  for =bxRepos/<group>/<top-level file of that repo>=. The only hits are the =This File= comments
+  of =ftoProc.sh= (D1, deferred).
+
+*Not done here --- the user's, in order:*
+1. +Commit and push =bisos-pip/common=, =bisos/bsip4= (and =bxGenesis/base= for its plant).+ Done 2026-11-23.
+2. +Release bisos.common (=bisos-pip-release=; PyPI is at 1.15).+ Done: 1.16.
+3. +Raw-BISOS on a VM: every gitGroup directory plain.+ Done 2026-11-23 ([[3.1]]). The plants on PATH:
+   the bxGenesis one needs bisos.gitist with =gitGroup-seed.cs= on PyPI (0.13 has not).
+4. Then delete the overview repos on GitHub. (The pointers in =bisos-pip/base= 6.2, =blee/base= 3.2
+   and gitist DESIGN.org were added 2026-11-23.)
+
