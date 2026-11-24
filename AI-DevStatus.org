@@ -34,13 +34,17 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   2026-11-23 confirmed it (3.1: no overview repos, base and .github cloned, =gitGroup= links, plain
   gitGroup directories). Left, the user's: mark 2.1/2.2 DONE and archive; delete the overview repos.
 - *Stage 3: VM rebuild glitches* (a LOOP over each Raw-BISOS rebuild on the VM).
-  - 3.1.1 VNC passwords: cause found (no =vncpasswd= in the images: =tigervnc-tools=), fixed in
-    bro_dockerfiles (=f74525b=) and the message in bisos-pip/dockerProc (=045ac32=), not yet built. Left: rebuild
-    and verify on the VM.
-  - 3.1.2 the CBM run: the 261123 log read as six problems (a--f); decided, a per-leaf bootstrap
-    sbom (pip packages + git clones); planned as 3.1.2.1--3.1.2.5 across sbom, capability,
-    bro_rawBisos, the raw chain. Open: the file name (=cbmBootstrap-sbom.pcs=?), where
-    =cbmProc.status= goes. Nothing implemented.
+  - 3.1.1 VNC passwords: DONE and archived. Cause: no =vncpasswd= in the images (=tigervnc-tools=);
+    fixed in bro_dockerfiles (=f74525b=) and bisos-pip/dockerProc (=045ac32=); rebuilt and tested on
+    the VM by the user.
+  - 3.1.2 the CBM run: the 261123 log read as seven problems (a--g; g, the anon clones not
+    writable by bystar, found 2026-11-24). Two phases. Phase 1 (3.1.2.1--3.1.2.5), 2026-11-24:
+    3.1.2.1 (bisos-pip/capability: =cbm_bootstrap=, the status under =/bisos/var/cbm/=) and 3.1.2.3
+    (bro_rawBisos: 13 pip-only =cbmBootstrap-sbom.pcs=, basename =cbsSpec=) done, committed (=8dfba00=, =7089792=), not
+    released; 3.1.2.2 checked, nothing missing; 3.1.2.4 (c and g): the install traced, the
+    model is implemented (default ACLs), so the VM broke it by A, B or C --- four read-only
+    commands on the VM tell which (its Results); 3.1.2.5 after the release of bisos.capability 0.27. Phase 2
+    (3.1.2.6--3.1.2.8): after gitist is merged with sbom.
 
 * Architecture
 - Members: =base=, =fbxoPkgs=, =overview=, =provisioners=, =start= (=raw-bisos.sh=, the =bisos-genesis=
@@ -57,7 +61,7 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
 * What Is Untested
 - The plant on a fresh platform: bisos.gitist with =gitGroup-seed.cs= is not on PyPI yet (0.13), so
   =bxGenesis_gitGroup.spcs= does not run there.
-- 3.1.1 on the VM (the rebuilt images, =set= / =clear=); everything in 3.1.2.
+- Everything in 3.1.2.
 
 * Key Design Decisions
 - =emacs+py+tex= for =.gitignore=, not =emacs+py=: it keeps =*_archive= (=AI-WorkPlan.org_archive=) and
@@ -67,9 +71,20 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   and re-running its CBMs, so the old layout phases out; =bisos-web= and =cliGui= stay without =base=.
 - The gitGroup link is relative (=command()= with =ln -sfn=), because the pbd's =symLink()= always
   makes an absolute one.
-- 3.1.2 (2026-11-24, user decision): each CBM leaf carries its own bootstrap sbom, so CBMs are
-  self-contained and distributed, not dependent on the platform's clone registry. bisos.sbom has no
-  git kind yet (=reposSeed.py= is a stub). VNC: =vncPassword set= hashes in a throw-away container of
+- 3.1.2 (2026-11-24, user decisions): each CBM leaf carries its own bootstrap sbom,
+  =cbmBootstrap-sbom.pcs=, so CBMs become self-contained and distributed. Phased: Phase 1 pip only
+  (=bisos3=), the clones central (bisos.common's registry, missing ones added there); Phase 2, after
+  gitist is merged with sbom (bisos.sbom has no git kind: =reposSeed.py= is a stub), the clones in
+  the leaves. The status is a host fact, so =/bisos/var/cbm/<leafRel>/cbmProc.status=, keyed
+  without the vcMode, with a =leaf= link back (implemented in bisos.capability); =cbmProc.control=
+  stays in the leaf. A missing central clone goes in bsip4's =bxRepos-gitist.pcs=.
+- Permissions policy (2026-11-24, user): bystar is in group =bisos=; Raw-BISOS installs everything
+  =bisos:bisos= and group-writable, so bystar can overwrite it. Implemented by
+  =bisosBaseDirsSetup.sh= (bxGenesis/provisioners): =2775= and =default:group::rwx= on =/bisos=,
+  =/var/bisos=, =/bxo=, =/de/run=. The later steps run as =sudo -u bisos=, whose umask is =0022=, so
+  the default ACL is the only source of group write: fix a deviation at its step, never by a
+  =chmod -R= afterwards. A tool that chmods its own files (=egg-info=, tarball modes) escapes it.
+- VNC: =vncPassword set= hashes in a throw-away container of
   the image, so a tool missing there cannot be fixed in the running instance.
 
 Pointers: the gitGroup model is bisos.gitist's =README.org= and =DESIGN.org= (Step 2, of which Stage 2

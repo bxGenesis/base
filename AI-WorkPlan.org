@@ -12,19 +12,19 @@
 
 ####+BEGIN: b:ai:workflow/driver
 *  [[elisp:(revert-buffer)][revert-buffer]] | [[elisp:(toggle-read-only)][read/wr]] | [[elisp:(show-all)][Show-All]]  [[elisp:(org-shifttab)][Overview]]  [[elisp:(progn (org-shifttab) (org-content))][Content]] | [[elisp:(delete-other-windows)][(1)]] | [[elisp:(progn (save-buffer) (kill-buffer))][S&Q]] [[elisp:(save-buffer)][Save]] [[elisp:(kill-buffer)][Quit]] [[elisp:(bury-buffer)][Bury]] [[elisp:(magit)][Magit]]
-*  [[elisp:(org-cycle)][AI Workflow Driver :: /bx- commands]]  --  *|E|* Emacs  *|V|* VS Code  *|P|* prompt  *|S|* submitted
+*  [[elisp:(org-cycle)][AI Workflow Driver]]  --  *$Emacs*  /@VS Code/  #prompt-claude  _!submit-claude_
   State     :: (Refresh, on the Info line, shows the session)
-  Info      :: *|E|* [[elisp:(b:ai:workflow/driver/refresh)][Refresh]] | [[elisp:(blee:bnsm:panel-goto "/bisos/panels/bisos-core/bisos-pip/bisos.aiActivity/newStart/_nodeBase_")][Panel]] | [[elisp:(b:vscode:claude/dispatch)][Transient]] | [[elisp:(b:vscode/partnerShow)][partner-show]] | [[file:/bisos/git/bxRepos/blee/vscode-claude/README.org][vscode-claude-README]] | [[file:/bisos/git/bxRepos/bisos-pip/aiActivity/README.org][aiActivity-README]]
-  newStart  :: *|E|* [[bashRun:vscodeClaude-assemble.cs -i fullCheck][setup-check]] | [[bashRun:vscodeClaude-assemble.cs -i fullUpdate][setup]] | [[elisp:(b:vscode/init)][partner-init]]  *|P|* [[aiActivity:session-start][session-start]]  *|S|* [[aiActivity:S=session-start][session-start]]
-  VS Code   :: *|V|* [[elisp:(b:vscode/fileOpen)][Visit]] | [[elisp:(b:vscode/rootOpen)][root-window]]   <- Ctrl+K Ctrl+E: this file in Blee, at its line
-  Session   :: *|E|* [[elisp:(b:vscode:claude/sessionSelect)][select-session]]  *|P|* [[aiActivity:session-start][session-start]] | [[aiActivity:session-report][session-report]]  *|S|* [[aiActivity:S=session-start][session-start]]
-  Activity  :: *|P|* [[aiActivity:activity-reach][activity-reach]] | [[aiActivity:activity-report][activity-report]]  *|S|* [[aiActivity:S=activity-reach][activity-reach]]
-  Read      :: *|P|* [[aiActivity:status-read][status-read]] | [[aiActivity:archive-read][archive-read]] | [[aiActivity:ai-outputs][ai-outputs]]  *|S|* [[aiActivity:S=status-read][status-read]] | [[aiActivity:S=archive-read][archive-read]] | [[aiActivity:S=ai-outputs][ai-outputs]]
-  Work      :: *|P|* [[aiActivity:todo-do][todo-do]] | [[aiActivity:todo-done][todo-done]]  *|S|* [[aiActivity:S=todo-do][todo-do]] | [[aiActivity:S=todo-done][todo-done]]
-  Record    :: *|P|* [[aiActivity:status-update][status-update]] | [[aiActivity:archive-update][archive-update]] | [[aiActivity:context-trim][context-trim]]  *|S|* [[aiActivity:S=status-update][status-update]] | [[aiActivity:S=archive-update][archive-update]]
-  Git       :: *|P|* [[aiActivity:git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:git-commit-msg][git-commit-msg]]  *|S|* [[aiActivity:S=git-uncommitted-list][git-uncommitted-list]] | [[aiActivity:S=git-commit-msg][git-commit-msg]]
-  Close     :: *|P|* [[aiActivity:session-verify][session-verify]] | [[aiActivity:skills-improve][skills-improve]]  *|S|* [[aiActivity:S=git-commit-walk][git-commit-walk]] | [[aiActivity:S=git-pull-list-add][git-pull-list-add]]
-  newResume :: *|E|* [[bashRun:git -C /bxRepos/blee-binders/evolution pull --rebase][outputs-pull]] | [[elisp:(b:ai:workflow/driver/pullListVisit)][pull-list]] | [[bashRun:pipPkgsStatus.cs -i pkgsStatus][pipPkgsStatus]]  *|P|* [[aiActivity:newResume-confirm][newResume-confirm]]  *|S|* [[aiActivity:S=newResume-confirm][newResume-confirm]]
+  Info      :: *[[elisp:(b:ai:workflow/driver/refresh)][$Refresh]]* | *[[elisp:(blee:bnsm:panel-goto "/bisos/panels/bisos-core/bisos-pip/bisos.aiActivity/newStart/_nodeBase_")][$Panel]]* | *[[elisp:(b:vscode:claude/dispatch)][$Transient]]* | *[[elisp:(b:vscode/partnerShow)][$partner]]* | *[[file:/bisos/git/bxRepos/blee/vscode-claude/README.org][$vscode-claude-README]]* | *[[file:/bisos/git/bxRepos/bisos-pip/aiActivity/README.org][$aiActivity-README]]*
+  newStart  :: *[[bashRun:vscodeClaude-assemble.cs -i fullCheck][$setup-check]]* | *[[bashRun:vscodeClaude-assemble.cs -i fullUpdate][$setup]]* | *[[elisp:(b:vscode/init)][$partner-init]]* | [[aiActivity:session-start][#session-start]] | _[[aiActivity:S=session-start][!session-start]]_
+  VS Code   :: /[[elisp:(b:vscode/fileOpen)][@Visit]]/ | /[[elisp:(b:vscode/rootOpen)][@root-window]]/   <- Ctrl+K Ctrl+E: this file in Blee, at its line
+  Session   :: *[[elisp:(b:vscode:claude/sessionSelect)][$select-session]]* | [[aiActivity:session-start][#session-start]] | [[aiActivity:session-report][#session-report]] | _[[aiActivity:S=session-start][!session-start]]_
+  Activity  :: [[aiActivity:activity-reach][#activity-reach]] | [[aiActivity:activity-report][#activity-report]] | _[[aiActivity:S=activity-reach][!activity-reach]]_
+  Read      :: [[aiActivity:status-read][#status-read]] | [[aiActivity:archive-read][#archive-read]] | [[aiActivity:ai-outputs][#ai-outputs]] | _[[aiActivity:S=status-read][!status-read]]_ | _[[aiActivity:S=archive-read][!archive-read]]_ | _[[aiActivity:S=ai-outputs][!ai-outputs]]_
+  Work      :: [[aiActivity:todo-do][#todo-do]] | [[aiActivity:todo-done][#todo-done]] | _[[aiActivity:S=todo-do][!todo-do]]_ | _[[aiActivity:S=todo-done][!todo-done]]_
+  Record    :: [[aiActivity:status-update][#status-update]] | [[aiActivity:archive-update][#archive-update]] | [[aiActivity:context-trim][#context-trim]] | _[[aiActivity:S=status-update][!status-update]]_ | _[[aiActivity:S=archive-update][!archive-update]]_
+  Git       :: [[aiActivity:git-uncommitted-list][#git-uncommitted-list]] | [[aiActivity:git-commit-msg][#git-commit-msg]] | _[[aiActivity:S=git-uncommitted-list][!git-uncommitted-list]]_ | _[[aiActivity:S=git-commit-msg][!git-commit-msg]]_
+  Close     :: [[aiActivity:session-verify][#session-verify]] | [[aiActivity:skills-improve][#skills-improve]] | _[[aiActivity:S=git-commit-walk][!git-commit-walk]]_ | _[[aiActivity:S=git-pull-list-add][!git-pull-list-add]]_
+  newResume :: *[[bashRun:git -C /bxRepos/blee-binders/evolution pull --rebase][$outputs-pull]]* | *[[elisp:(b:ai:workflow/driver/pullListVisit)][$pull-list]]* | *[[bashRun:pipPkgsStatus.cs -i pkgsStatus][$pipPkgsStatus]]* | [[aiActivity:newResume-confirm][#newResume-confirm]] | _[[aiActivity:S=newResume-confirm][!newResume-confirm]]_
 
 ####+END:
 
@@ -133,48 +133,6 @@ Failures:
     /bxRepos/mb-ephemera/pub-shuttle/tmp/CBMs-install-261123.out
 ----- Results: ------
 
-** TODO [#A] <<3.1.1>> VNC Password Activation Details and Verification :aiAndMe:
-SCHEDULED: <2026-11-23 Mon 19:52>
-Confirm that the right place to continue this work is at: /bxRepos/bxObjects/bro_dockerfiles/
-The VNC passwords are not in effect, likely old images and config
-  - Which images are to be rebuilt?
-  - How can mass rebuiling of images be automated
-  - How is the password modified, etc? These are documented. We need to verify that documentation is in the right place with good visibility
------ Results: ------
-
-*Where.* Yes: =bxObjects/bro_dockerfiles= (the images, =containerManage.sh=), and
-=bisos-pip/dockerProc= (=containerProc_instanceVncPassword=, the BISOS way). Documented in
-bro_dockerfiles' =README.org= ("VNC password (optional)"); its AI-DevStatus lists VNC passwords as
-untested on a daemon --- this VM run is the first.
-
-*How it works.* No password is the default. =set= asks twice, makes the password file with the
-image's own =vncpasswd -f= in a *throw-away container of the image* (never in the running instance;
-the password on stdin), =docker cp='s it into the instance as =/home/bystar/.config/bisosVncPasswd=,
-and restarts a running instance. At each VNC start =/usr/local/bin/vncStart.sh= makes the file
-bystar's (0600) and runs =vncserver -SecurityTypes VncAuth -rfbauth= (empty or missing file: none).
-Lost on =delete=.
-
-*Cause found (on the VM, 2026-11-23).* "vncpasswd produced no output": =which -a vncpasswd= is empty
-in the container. The confined Dockerfiles install =tigervnc-standalone-server tigervnc-common= with
-=--no-install-recommends=; =vncpasswd= is in =tigervnc-tools=. Installing it in the running instance
-does not help, since =set= runs the image, not the instance.
-
-*Fixed (committed: bro_dockerfiles =f74525b=, dockerProc =045ac32=; not yet built):*
-- bro_dockerfiles: =tigervnc-tools= in the VNC install of =bisos_deb13-fresh= and =bisos_deb12-fresh=
-  (the other five images are =FROM= them); =containerManage.sh= (all 7, still byte-identical):
-  a failed =vncpasswd= now says so and names the rebuild; README: images built before 2026-11-24 must
-  be rebuilt. =hubTag= not bumped (the user's, at upload).
-- bisos-pip/dockerProc =containerProc_csu.py=: the message keeps the engine's rc and stderr (it hid
-  "executable file not found") and names the rebuild.
-
-*Which images to rebuild:* all of them, confined base first --- on the VM =bisos_deb13-fresh=, then
-=bisos_deb13-sysd= (and any other in use); then =instanceDelete= + =instanceUp=. *Mass rebuild:* the
-walk from =debian/13/ftoBranchProc.spcs= (README, "Walking the Tree: Lifecycle Verbs"), confined,
-privileged, rootless-sysd in order.
-
-*Left, on the VM:* rebuild, re-create, =set=, then a VNC viewer and noVNC ask for the password;
-=clear=; survives restart; lost on delete. Then mark DONE.
-
 ** TODO [#A] <<3.1.2>> Get rawBisosCBM to run end-to-end relaibly :aiAndMe:
 SCHEDULED: <2026-11-23 Mon 19:52>
 Confirm that the right place to continue this work is at: //bxRepos/bisos-pip/capability/
@@ -185,96 +143,293 @@ The 261123 logs are at: /bxRepos/mb-ephemera/pub-shuttle/tmp/CBMs-install-261123
 
 *The log, read (2026-11-24).* Six distinct problems, not one; the walk still reports =failed=0=.
 
-| # | Symptom                                                   | Cause                                                                                   | Fix in            |
-|---+-----------------------------------------------------------+-----------------------------------------------------------------------------------------+-------------------|
-| a | =PermissionError .../<leaf>/cbmProc.status= (all 15)        | =cbmProc.status= tracked in git in =bro_rawBisos= (22 files, the dev host's history), the anon clone not writable; =statusPath()= is =plantDir/cbmProc.status= | capability, bro_rawBisos |
-| b | =kafkaCbs-sbom.pcs: command not found= (and prometheus, grafana, pypiserver, devpi, geneweb), rc 127 | =cbsSpec= is a git path, so the CBS runs from the clone; =bisos.<cap>= is not pip-installed, so its sibling =.pcs= are not on PATH (PyPI 0.1 has them) | the bootstrap sbom (below) |
-| c | =pip install ... Permission denied: /bisos/venv/py3/asc/...= (airflow, psycopg2, asyncpg, django, gunicorn) | package directories in =asc= not writable by bystar; probably installed earlier as root (umask 022). Unverified | the raw chain (=bxGenesis/start=) |
-| d | airflow units: =inBytes arg of as_root_writeToFile is None=   | (c): no =airflow=, so =sysdUnitFileFunc()= is None; =bifSystemd_csu.configFileUpdate= should say so, not raise | debian (minor)    |
-| e | =gatsbyBxSidebar= Error=1, =csPlayerPerf= (no Django)         | (c), and =gatsbyBxSidebar-assemble.cs= exit 1                                           | look again after (c) |
-| f | =fto_forwardToLeaves ... failed=0=                           | a failed Cmnd exits 0                                                                   | bisos-pip/b Stage 4 (on hold for this pipeline) |
+| # | Symptom                                                   | Fix in                          |
+|---+-----------------------------------------------------------+---------------------------------|
+| a | =PermissionError= on =<leaf>/cbmProc.status= (all 15)         | capability, bro_rawBisos        |
+| b | =kafkaCbs-sbom.pcs: command not found=, rc 127 (and 5 more) | the bootstrap sbom (below)      |
+| c | =pip install=: =Permission denied= in =/bisos/venv/py3/asc=     | the raw chain (bxGenesis/start) |
+| d | airflow units: =inBytes arg of as_root_writeToFile is None= | debian (minor)                  |
+| e | =gatsbyBxSidebar= Error=1, =csPlayerPerf= (no Django)         | look again after (c)            |
+| f | =fto_forwardToLeaves ... failed=0=                          | bisos-pip/b Stage 4             |
+| g | =Permission denied= building in clones (=content/data=, ...)| the raw chain (3.1.2.4)         |
+
+The causes:
+- a. =cbmProc.status= is tracked in git in =bro_rawBisos= (22 files, the dev host's history), and the
+  anon clone is not writable; =statusPath()= is =plantDir/cbmProc.status=.
+- b. The same for prometheus, grafana, pypiserver, devpi and geneweb. =cbsSpec= is a git path, so the
+  CBS runs from the clone; =bisos.<cap>= is not pip-installed, so its sibling =.pcs= are not on PATH
+  (PyPI 0.1 has them).
+- c. airflow, psycopg2, asyncpg, django, gunicorn: package directories in =asc= not writable by
+  bystar; probably installed earlier as root (umask 022). Unverified.
+- d. From (c): no =airflow=, so =sysdUnitFileFunc()= is None; =bifSystemd_csu.configFileUpdate=
+  should say so, not raise.
+- e. (c), and =gatsbyBxSidebar-assemble.cs= exits 1.
+- f. A failed Cmnd exits 0; bisos-pip/b Stage 4 is on hold for this very pipeline.
+- g. Found 2026-11-24, on a second read of the log: the anon clones are not writable by bystar
+  either, and the repo-kind CBSes build inside them --- =csPlayer-webUi/content/data=,
+  =astro-starter-bystar/site/public=, =cliGui/webCliGui/webcligui_api= (=egg-info=), and
+  =bro_rawBisos/.../web/astro/content/data= (the platform leaf). The status move fixes (a) only;
+  (g) is the same question as (c), who owns what the raw chain creates, so it joins 3.1.2.4.
 
 Not problems: =policy-rc.d denied= (container), =ALERT: Missing .../currents/fp=, the interleaved output
 (stdout/stderr buffering, not parallel leaves). Each status is printed twice (cosmetic).
 
 *The decision (2026-11-24): a bootstrap sbom per CBM leaf.* Each leaf in a =bro_= repo gets
-=cbmBootstrap-sbom.pcs= (name to confirm; the leaf's directory says which capability), which
-1) pip-installs the CBM's packages and 2) git-clones the CBM's repos. A leaf is then self-contained
-and the CBMs fully distributed: what a capability needs before its CBS can run is in its leaf, not
-in the platform's clone registry.
+=cbmBootstrap-sbom.pcs= (the leaf's directory says which capability). It is built in two phases
+(below): Phase 1 pip-installs the CBM's packages; Phase 2 also git-clones the CBM's repos. A leaf is
+then self-contained and the CBMs fully distributed: what a capability needs before its CBS can run
+is in its leaf, not in the platform's clone registry.
 
 The leaves, by what their bootstrap does:
 
-| Kind                  | Leaves                                                                 | Bootstrap                                        |
-|-----------------------+------------------------------------------------------------------------+--------------------------------------------------|
-| CBS in a pip package  | nginx, reactPlus (=bisos.webCap=), airflow, kafka, prometheus, grafana, pypiserver, devpi, geneweb | pip =bisos.<cap>= into =bisos3=; =cbsSpec= becomes a basename (PATH) |
-| CBS in a repo         | csPlayerPerf, csPlayerUi, astroStarter, gatsbyBxSidebar (=bisos-web=)    | git clone of the site repo; its pip packages, if any |
-| CBS in the bro_ repo  | platform (=bro_rawBisos/.../web/astro=)                                | none                                             |
+| Kind                 | Leaves                                  | Phase 1           | Phase 2 adds |
+|----------------------+-----------------------------------------+-------------------+--------------|
+| CBS in a pip package | nginx, reactPlus (=bisos.webCap=),        | pip =bisos.<cap>=;  | its clone,   |
+|                      | airflow, kafka, prometheus, grafana,    | =cbsSpec= basename  | if any       |
+|                      | pypiserver, devpi, geneweb              |                   |              |
+|----------------------+-----------------------------------------+-------------------+--------------|
+| CBS in a repo        | csPlayerPerf, csPlayerUi, astroStarter, | its pip packages, | the site     |
+|                      | gatsbyBxSidebar (=bisos-web=)             | if any            | repo's clone |
+|----------------------+-----------------------------------------+-------------------+--------------|
+| CBS in the bro_ repo | platform (=bro_rawBisos/.../web/astro=)   | none              | none         |
 
 Facts that shape it:
 - bisos.sbom has no git kind: =bisos/sbom/reposSeed.py= is an empty stub. =pkgsSeed.setup()= has
-  =aptPkgsList=, =pipPkgsList=, =pipxPkgsList=, =npmPkgsList=, =sbomsList= and =virtenv= (the bootstrap
-  sets =virtenv="/bisos/venv/py3/bisos3"=).
+  =aptPkgsList=, =pipPkgsList=, =pipxPkgsList=, =npmPkgsList=, =sbomsList= and =virtenv=, which is
+  all Phase 1 needs (=virtenv="/bisos/venv/py3/bisos3"=): Phase 1 needs no change to bisos.sbom.
 - =pipPkg_isInstalled= is a substring search of =<virtenv>/bin/pip list=. On a dev host the editable
-  packages are in =dev-bisos3=, not =bisos3=, so the bootstrap installs a PyPI copy into =bisos3= too;
-  =dev-bisos3= is first on PATH, so the editable one still runs. Accepted; to be checked (3.1.2.3).
+  packages are in =dev-bisos3=, not =bisos3=, so in Phase 1 the bootstrap installs a PyPI copy into
+  =bisos3= too; =dev-bisos3= is first on PATH, so the editable one still runs. Accepted for Phase 1
+  (checked in 3.1.2.3); Phase 2 (3.1.2.8) does it properly.
 - Seen on the way: =PkgsSeedInfo.__init__= sets =self._pipxPkgsList = pipPkgsList= (=pkgsSeed.py:289=);
-  =setup()= overwrites it, so no effect today. Fix in 3.1.2.1.
+  =setup()= overwrites it, so no effect today. Fix with 3.1.2.6.
 
-*The plan* --- a cross-repo stage, in this order:
+*The status, under =/bisos/var/cbm/= (2026-11-24, proposal).* What a leaf has materialized is a
+fact of this host, not of the repo, so its status leaves the clone (problem a).
+- The file: =/bisos/var/cbm/<leafRel>/cbmProc.status=, with =<leafRel>= the leaf's resolved directory
+  relative to =/bisos/git/<vcMode>/bxRepos/= (=anon= or =auth=):
+  : /bisos/var/cbm/bxObjects/bro_rawBisos/bro_rawBisosPlatform/sys/cbm/collective/hereWeb/kafka/cbmProc.status
+  Without the vcMode, an anon and an auth clone of a leaf share one status, as the host has one
+  materialization of it. A leaf outside a bxRepos tree (a PALS elsewhere) is keyed by its absolute
+  path, under =/bisos/var/cbm/_abs_/=.
+- The links: one, in the var directory, none in the leaf.
+  - =/bisos/var/cbm/<leafRel>/leaf -> <the leaf's directory>=, rewritten at each write: it says which
+    clone ran last, and leads from a status to its leaf.
+  - Nothing from the leaf to its status: the leaf may be a read-only clone, and a link there would be
+    an untracked file in every clone. =cbm_status= computes the path and prints it with the status.
+- Writing: =statusWrite= creates the directories (mode 2775). =/bisos/var= is =bisos:bisos=, setgid and
+  group-writable, so the walk as bystar writes there and the files stay in group bisos.
+- Reading: =cbm_status= reads the new place only. The 22 files tracked in bro_rawBisos are the dev
+  host's history: =git rm --cached=, =cbmProc.status= in its =.gitignore=, not migrated.
+- All of a host's statuses: =find /bisos/var/cbm -name cbmProc.status= (a =cbm_statusAll= later,
+  if wanted).
+- =cbmProc.control= stays in the leaf: it is the repo's policy (which leaves are enabled), tracked in
+  git. Open: on an anon clone =cbm_enable= cannot write it either. A host override,
+  =/bisos/var/cbm/<leafRel>/cbmProc.control= read before the leaf's, would fix that; not in Phase 1
+  unless the VM shows a need.
 
-| Order | Repo                     | Change                                                                 | Released as      | TODO      |
-|-------+--------------------------+------------------------------------------------------------------------+------------------+-----------|
-| 1     | bisos-pip/sbom           | =reposSeed.py=: a =GitRepo= kind and =gitReposList= in =setup()=, cloned by =sbom_fullUpdate= | bisos.sbom       | [[3.1.2.1]] |
-| 2     | bisos-pip/capability     | =cbm_bootstrap= verb; =cbm_materialize= runs it first when the file exists; status out of the leaf (a) | bisos.capability | [[3.1.2.2]] |
-| 3     | bxObjects/bro_rawBisos   | =cbmBootstrap-sbom.pcs= in the 15 leaves; =cbsSpec= basenames; untrack =cbmProc.status= | (git only)       | [[3.1.2.3]] |
-| 4     | bxGenesis/start (raw chain) | =asc= (and =bisos3=) writable by bystar on a fresh install (c)        | (git only)       | [[3.1.2.4]] |
-| 5     | (VM)                     | Raw-BISOS, then =sysCbmFullyMaterialize.sh=; (d) and (e) re-read          | ---              | [[3.1.2.5]] |
+*Phase 1 --- rawBisosCBM right after a pure Raw-BISOS (anon).* The goal: =sysCbmFullyMaterialize.sh=
+runs end to end on the VM after a fresh Raw-BISOS install, with anon clones only.
+- =cbmBootstrap-sbom.pcs= does pip installs only, into =/bisos/venv/py3/bisos3=.
+- The git clones are assumed done centrally: bisos.common's clone registry, and bsip4's
+  =bxRepos-gitist.pcs= for repos beyond it. A repo a leaf needs that neither clones is added to
+  =bxRepos-gitist.pcs= (3.1.2.2), not to the leaf.
 
-Later, not in this stage: bisos.common's clone registry stops cloning the CBM repos (as Stage 2
-did for overview); (d) in bisos-pip/debian; (f) is bisos-pip/b Stage 4.
+| TODO    | Repo                   | Change                                                       |
+|---------+------------------------+--------------------------------------------------------------|
+| [[3.1.2.1]] | bisos-pip/capability   | =cbm_bootstrap=; =cbm_materialize= runs it first; the status     |
+|         |                        | under =/bisos/var/cbm/=. Release bisos.capability.             |
+|---------+------------------------+--------------------------------------------------------------|
+| [[3.1.2.2]] | bisos-pip/common       | Every repo the leaves need is in the clone registry; add     |
+|         |                        | the missing ones. Release bisos.common.                      |
+|---------+------------------------+--------------------------------------------------------------|
+| [[3.1.2.3]] | bxObjects/bro_rawBisos | =cbmBootstrap-sbom.pcs= (pip only) in the 15 leaves;           |
+|         |                        | =cbsSpec= basenames; untrack =cbmProc.status=.                   |
+|---------+------------------------+--------------------------------------------------------------|
+| [[3.1.2.4]] | bxGenesis/start        | Venvs and anon clones writable by bystar (c), (g).            |
+|---------+------------------------+--------------------------------------------------------------|
+| [[3.1.2.5]] | (VM)                   | Raw-BISOS, then =sysCbmFullyMaterialize.sh=; (d), (e) re-read. |
 
-** TODO [#A] <<3.1.2.1>> bisos.sbom: git repos in an sbom (=reposSeed.py=) :aiAndMe:
-:PROPERTIES:
-:REPO: bisos-pip/sbom
-:END:
-A =GitRepo= (server path, local path under =/bisos/git/<vcMode>/bxRepos/=, the platform's vcMode, as
-bisos.common's =gitClone= does), =gitReposList= in =pkgsSeed.setup()=, cloned by =sbom_fullUpdate=
-(skipped when already cloned), and =gitRepo_isCloned=. Also the =_pipxPkgsList= slip at =pkgsSeed.py:289=.
------ Results: ------
+*Phase 2 --- self-contained leaves, after gitist is merged with sbom.* Starts once Phase 1 is
+verified on the VM and the merge is done. The merge is planned nowhere yet; it is bisos-pip/gitist's
+and bisos-pip/sbom's (3.1.2.6 is the placeholder here).
+- The leaf's clones move into its =cbmBootstrap-sbom.pcs=, and the central registry stops cloning
+  the CBM repos (as Stage 2 did for overview).
+- Development: when =/bisos/git/bxRepos= is detected, the bootstrap installs the needed packages
+  from the local clones, editable, instead of from PyPI. The exact rule (=/bisos/git/bxRepos= ->
+  =auth=, or the package's clone present) is to be settled in 3.1.2.8.
 
-** TODO [#A] <<3.1.2.2>> bisos.capability: =cbm_bootstrap=, and the status out of the leaf :aiAndMe:
+| TODO    | Repo                   | Change                                                   |
+|---------+------------------------+----------------------------------------------------------|
+| [[3.1.2.6]] | bisos-pip/gitist, sbom | The merge: git repos as a kind of an sbom.               |
+|---------+------------------------+----------------------------------------------------------|
+| [[3.1.2.7]] | bxObjects/bro_rawBisos | Each =cbmBootstrap-sbom.pcs= gains the leaf's clones;      |
+|         | bisos-pip/common       | the registry stops cloning the CBM repos.                |
+|---------+------------------------+----------------------------------------------------------|
+| [[3.1.2.8]] | bisos-pip/sbom         | On a development host (=/bisos/git/bxRepos= detected), the |
+|         |                        | needed packages from the local clones, editable.         |
+
+Not in this stage: (d) in bisos-pip/debian; (f) is bisos-pip/b Stage 4.
+
+** TODO [#A] <<3.1.2.1>> Phase 1 --- capability: =cbm_bootstrap=, status in =/bisos/var/cbm= :aiAndMe:
 :PROPERTIES:
 :REPO: bisos-pip/capability
 :END:
 - =cbm_bootstrap=: runs =./cbmBootstrap-sbom.pcs -i sbom_fullUpdate= in the leaf; =cbm_materialize=
   runs it first when the file exists (one walk verb), and fails the leaf if it fails.
-- (a): =cbmProc.status= not in the leaf directory (it may be a read-only clone): under =/bisos/var/=,
-  keyed by the leaf's path; =cbm_status= reads it there. Decide the place before coding.
-- =cbm-authorship= skill: the bootstrap sbom and the new status place.
+- (a): =statusPath()= as in "The status, under =/bisos/var/cbm/=" above, with the =leaf= link;
+  =cbm_status= prints the path.
+- =cbm-authorship= skill: the bootstrap sbom and the status place.
 ----- Results: ------
 
-** TODO [#A] <<3.1.2.3>> bro_rawBisos: a bootstrap sbom in every CBM leaf :aiAndMe:
+*Done 2026-11-24, committed =8dfba00=, not released.* In bisos-pip/capability:
+- =cbmProc_seedInfo.py=: =STATUS_BASE= (=/bisos/var/cbm=), =leafRel()=, =statusDir()=, =statusPath()=
+  under it; =statusWrite= creates the directories =2775= and keeps the =leaf= link (replaced
+  atomically); =BOOTSTRAP_FILENAME=, =bootstrapPath()=.
+- =cbmProc_csu.py=: =cbm_bootstrap= (not gated); =_bootstrapRun= runs the leaf's bootstrap with the
+  leaf as cwd and logs =ran: bootstrap ok|failed rc=N (for <verb>)=; =cbm_materialize=,
+  =cbm_reMaterialize= and =cbm_sbom= run it after the gate, before =resolveCbsSpec=; =cbm_status=
+  prints the path.
+- =verify.sh=: 66 pass, 0 fail (status tests on a scratch base; =leafRel= cases; the =leaf= link; one
+  stale =resolveCbsSpec= test fixed). README.org, AI-DevStatus.org, and the =cbm-authorship= skill
+  (=bxObjects/aiTemplates-DE=) updated.
+- Tested here: =cbm_status= and =cbm_bootstrap= on the real kafka leaf (read-only: no bootstrap
+  there yet, nothing written); =_bootstrapRun= with a fake bootstrap, rc 0 and 3. Not tested: a real
+  materialize through a bootstrap (it would pip-install into this host's =bisos3=).
+- Known gap: a failed =sbom_fullUpdate= exits 0 (bisos-pip/b Stage 4), so a failed bootstrap shows
+  as the =cbsSpec-unresolvable= line that follows, not as =bootstrap failed=.
+- Left (yours): release bisos.capability 0.27 --- the VM needs it.
+
+** TODO [#A] <<3.1.2.2>> Phase 1 --- central clones: every repo the leaves need is cloned :aiAndMe:
+:PROPERTIES:
+:REPO: bisos/bsip4
+:END:
+For each of the 15 leaves (and the =pals= ones): the repos its CBS runs from or links into (the
+=bisos-web= sites, the =bisos-pip/<cap>= repos where =cbsSpec= is a git path today). Compare with what
+a fresh anon install clones; add the missing ones to the registry.
+----- Results: ------
+
+*Checked 2026-11-24: nothing is missing, no change.* With =cbsSpec= a basename, the pip-kind leaves
+no longer need their =bisos-pip/<cap>= clones. What the other leaves need, and who clones it:
+
+| Needed by       | Repo                                            | Cloned by      |
+|-----------------+-------------------------------------------------+----------------|
+| every leaf      | =bxObjects/bro_rawBisos= (also the pals one)    | bisos.common   |
+| gatsbyBxSidebar | =bisos-web/gatsby-starter-bystar-nestedSidebar= | bisos.common   |
+| csPlayerUi      | =bisos-web/csPlayer-webUi=                      | bisos.common   |
+| csPlayerPerf    | =bisos-web/csPlayerPerf-drf=                    | bisos.common   |
+| csPlayerPerf    | =cliGui/webCliGui=, =cliGui/csLib= (editable)   | bsip4 (gitist) |
+| astroStarter    | =bisos-web/astro-starter-bystar=                | bsip4 (gitist) |
+
+The 261123 log agrees: each of these was present on the VM (the failures inside them are (g)). The
+place for a missing repo is bsip4's =bxRepos-gitist.pcs= (a line, no release), not bisos.common.
+
+** TODO [#A] <<3.1.2.3>> Phase 1 --- bro_rawBisos: a pip-only bootstrap in every leaf :aiAndMe:
 :PROPERTIES:
 :REPO: bxObjects/bro_rawBisos
 :END:
-After 3.1.2.1 and 3.1.2.2 are released. =cbmBootstrap-sbom.pcs= in the 15 =hereWeb= leaves (and the
-=pals= ones), by the table above; =cbsSpec= a basename for the pip kind; =git rm --cached= the 22
-=cbmProc.status= files and ignore them. Check on a dev host that the editable packages still win.
+After 3.1.2.1 and 3.1.2.2 are released. =cbmBootstrap-sbom.pcs= (pip only, =virtenv= =bisos3=) in the
+15 =hereWeb= leaves (and the =pals= ones), by the table above; =cbsSpec= a basename for the pip kind;
+=git rm --cached= the 22 =cbmProc.status= files and ignore them. Check on a dev host that the editable
+packages still win.
 ----- Results: ------
 
-** TODO [#A] <<3.1.2.4>> Raw chain: =asc= writable by bystar on a fresh install :aiAndMe:
+*Done 2026-11-24, committed =7089792=.* In =bro_rawBisos/bro_rawBisosPlatform/sys/=:
+- =cbmBootstrap-sbom.pcs= (=775=) in 13 of the 14 =hereWeb= leaves: =bisos.webCap= for nginx, reactPlus,
+  csPlayerPerf, csPlayerUi, astroStarter, gatsbyBxSidebar; =bisos.<cap>= for airflow, kafka,
+  prometheus, grafana, pypiserver, devpi, geneweb. None for platform (its CBS is in bro_rawBisos).
+- =cbsSpec= a basename in the 9 pip-kind =cbmProc.spcs=.
+- =.gitignore=: =cbmProc.status=.
+- Not done: the =pals= leaf (its CBS is in bro_rawBisos, needing no bootstrap) and the 7 =induct=
+  leaves (not walked on the VM; their CBSes are git paths into =capSpecs=, =lcnt=, =vscodeClaude=
+  --- the same fix, when induct joins the run).
+- Checked here: =cbmBootstrap-sbom.pcs= loads (=virtenv= =bisos3=, =pp("bisos.kafka")=);
+  =pipPkg_isInstalled= says kafka False, webCap True in =bisos3=; =kafka-cbs.pcs= resolves to
+  =dev-bisos3/bin/= (the editable copy wins). PyPI has all 6 packages (=bisos.kafka 0.1= etc.), each
+  with its =-cbs.pcs= and =Cbs-sbom.pcs= (wheels inspected).
+- The 22 status files untracked (=git rm --cached=; on disk and ignored now).
+- Pushed before 0.27 is on PyPI: the VM must not pull or rebuild until it is (0.26 ignores
+  the bootstraps, and the basename =cbsSpec=s then fail).
+
+** TODO [#A] <<3.1.2.4>> Phase 1 --- Raw chain: venvs and clones writable by bystar :aiAndMe:
 :PROPERTIES:
 :REPO: bxGenesis/start
 :END:
 On the VM first: =ls -l /bisos/venv/py3/asc/lib/python3.13/site-packages/text_unidecode= (owner,
 mode), and find the step that installed into =asc= as root. Then fix that step (install as bystar, or
-group-writable), not the permissions afterwards.
+group-writable), not the permissions afterwards. Since 2026-11-24 also (g): the anon clones, and
+=bisos3= (the bootstraps pip-install there as bystar).
 ----- Results: ------
 
-** TODO [#A] <<3.1.2.5>> Verify on the VM: =sysCbmFullyMaterialize.sh= end to end :aiAndMe:
-Raw-BISOS, then =sysCbmFullyMaterialize.sh=: every leaf materialized, no =PermissionError=, no
-=command not found=; then re-read (d) and (e). Until bisos-pip/b Stage 4, read the log, not =failed==.
+*The policy (2026-11-24, user):* bystar is in group =bisos=; Raw-BISOS installs everything as
+=bisos:bisos=, group-writable; so bystar can overwrite it. The trace below says the install
+implements that, so on the VM it was not in effect for some other reason.
+
+*The install, traced (2026-11-24, from the sources on this host):*
+1. =installRawBisos.sh= (bro_dockerfiles =common/raw-bisos=), as bystar: =raw-bisos.sh -i
+   installUnsitedBisos= (=umask 0002=), then pipx =bisos.provision= and =provisionBisos.sh -i
+   sysBasePlatform=, which sources bxGenesis/provisioners' =bisosProvisioners_lib.sh=.
+2. =vis_provisioners_sysBasePlatform=: =updateAccts= (=bisosAccounts_lib.sh=: the =bisos= group, and
+   =usermod -G bisos --append= for an existing bystar), then =bisosBaseDirsSetup= --- =/bisos=,
+   =/var/bisos=, =/bxo=, =/de/run= made =bisos:bisos=, =2775=, and =setfacl -m default:group::rwx=.
+3. Everything after runs as =sudo -u bisos= (the anon clones; bsip4 =bsipProvision.sh=: the =asc= venv
+   by =pyVenv-asc-sbom.pcs=, =rawBisos-sbom.pcs=, =bxRepos-gitist.pcs=; =bisos3= by
+   =bisosPyVenvSetup.sh=).
+   =sudo= sets its own umask (the default =0022=, combined with the caller's), so group write comes
+   *only* from the default ACL of step 2: a default ACL overrides the umask.
+On this host the model holds: =getfacl= shows =default:group::rwx= on =/bisos=, =asc=, =/bisos/git/anon=;
+anon clones are =bisos:bisos rw-rw-r--=; =bisos3= has no file without group write, =asc= 4 (the venv's
+=activate*=). The few exceptions are files a tool chmods itself (=egg-info/PKG-INFO=, a tarball's
+modes under =node_modules=): an explicit =chmod= sets the ACL mask and drops group write.
+
+*So on the VM, one of three broke it* (each is one command to tell apart):
+- A. The walk's shell did not have group =bisos=. =usermod= in step 2 does not reach running
+  sessions; =sysCbmFullyMaterialize.sh= says to run it only after a container down+up. A VNC/xfce
+  terminal started before the install keeps the old groups even after a new login elsewhere.
+- B. The default ACL did not take on the VM's =/bisos= (=setfacl= failed, or the filesystem refused it).
+- C. Something ran as root (=sudo= without =-u bisos=) and left root-owned files.
+
+*To run on the VM (read-only), in the shell that runs the walk:*
+: id -nG                                                     # A: is bisos listed?
+: getfacl -p /bisos /bisos/venv/py3/asc /bisos/git/anon | grep default   # B: default:group::rwx?
+: stat -c '%U:%G %A %n' /bisos/venv/py3/asc/lib/python3.13/site-packages/text_unidecode \
+:   /bisos/git/anon/bxRepos/bisos-web/csPlayer-webUi/content
+: find /bisos/venv/py3 /bisos/git/anon -user root 2>/dev/null | head      # C
+If A: nothing to fix in the install; a guard should refuse to walk without the group (proposed:
+=sysCbmManage.cs -i fullyMaterialize= checks =bisos= in =os.getgroups()= and says to restart the
+session). If B or C: the fix is in the step found, not a =chmod -R= afterwards.
+
+** TODO [#A] <<3.1.2.5>> Phase 1 --- Verify on the VM: =sysCbmFullyMaterialize.sh= end to end :aiAndMe:
+Raw-BISOS (anon), then =sysCbmFullyMaterialize.sh=: every leaf materialized, no =PermissionError=, no
+=command not found=, the statuses under =/bisos/var/cbm=; then re-read (d) and (e). Until bisos-pip/b
+Stage 4, read the log, not =failed==.
+----- Results: ------
+
+** TODO [#B] <<3.1.2.6>> Phase 2 --- gitist merged with sbom: git repos in an sbom :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-pip/gitist
+:END:
+A placeholder: the merge is to be planned in bisos-pip/gitist and bisos-pip/sbom, not here. What
+Phase 2 needs from it: a leaf's sbom can list git repos (server, local path under
+=/bisos/git/<vcMode>/bxRepos/=, the platform's vcMode), cloned by =sbom_fullUpdate=, skipped when
+already cloned. Also the =_pipxPkgsList= slip at =pkgsSeed.py:289=.
+----- Results: ------
+
+** TODO [#B] <<3.1.2.7>> Phase 2 --- the leaves' clones in their bootstraps :aiAndMe:
+:PROPERTIES:
+:REPO: bxObjects/bro_rawBisos
+:END:
+After 3.1.2.6. Each =cbmBootstrap-sbom.pcs= gains the leaf's clones; then bisos.common's registry
+stops cloning the CBM repos (bisos-pip/common), as Stage 2 did for overview.
+----- Results: ------
+
+** TODO [#B] <<3.1.2.8>> Phase 2 --- development hosts: the local packages, editable :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-pip/sbom
+:END:
+When =/bisos/git/bxRepos= is detected, the bootstrap installs the needed packages from their local
+clones, editable (=dev-bisos3=), instead of PyPI copies into =bisos3=. Settle the detection rule
+first, and whether it belongs in bisos.sbom (any pip kind) or in the bootstrap.
 ----- Results: ------
 
 

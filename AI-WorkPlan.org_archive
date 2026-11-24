@@ -163,3 +163,54 @@ Implemented as planned in 2.1, in two repos (committed: bisos-pip/common =e8a634
 4. Then delete the overview repos on GitHub. (The pointers in =bisos-pip/base= 6.2, =blee/base= 3.2
    and gitist DESIGN.org were added 2026-11-23.)
 
+
+* DONE [#A] <<3.1.1>> VNC Password Activation Details and Verification :aiAndMe:
+CLOSED: [2026-11-24 Tue 05:34] SCHEDULED: <2026-11-23 Mon 19:52>
+:PROPERTIES:
+:ARCHIVE_TIME: 2026-11-24 Tue 05:34
+:ARCHIVE_FILE: /bxRepos/bxGenesis/base/AI-WorkPlan.org
+:ARCHIVE_OLPATH: Stage 3 TODOs  -- In Progress
+:ARCHIVE_CATEGORY: AI-WorkPlan
+:ARCHIVE_TODO: DONE
+:END:
+Confirm that the right place to continue this work is at: /bxRepos/bxObjects/bro_dockerfiles/
+The VNC passwords are not in effect, likely old images and config
+  - Which images are to be rebuilt?
+  - How can mass rebuiling of images be automated
+  - How is the password modified, etc? These are documented. We need to verify that documentation is in the right place with good visibility
+----- Results-MB: ------
+Tested on VM -- Re-designed and it works.
+----- Results-AI: ------
+*Where.* Yes: =bxObjects/bro_dockerfiles= (the images, =containerManage.sh=), and
+=bisos-pip/dockerProc= (=containerProc_instanceVncPassword=, the BISOS way). Documented in
+bro_dockerfiles' =README.org= ("VNC password (optional)"); its AI-DevStatus lists VNC passwords as
+untested on a daemon --- this VM run is the first.
+
+*How it works.* No password is the default. =set= asks twice, makes the password file with the
+image's own =vncpasswd -f= in a *throw-away container of the image* (never in the running instance;
+the password on stdin), =docker cp='s it into the instance as =/home/bystar/.config/bisosVncPasswd=,
+and restarts a running instance. At each VNC start =/usr/local/bin/vncStart.sh= makes the file
+bystar's (0600) and runs =vncserver -SecurityTypes VncAuth -rfbauth= (empty or missing file: none).
+Lost on =delete=.
+
+*Cause found (on the VM, 2026-11-23).* "vncpasswd produced no output": =which -a vncpasswd= is empty
+in the container. The confined Dockerfiles install =tigervnc-standalone-server tigervnc-common= with
+=--no-install-recommends=; =vncpasswd= is in =tigervnc-tools=. Installing it in the running instance
+does not help, since =set= runs the image, not the instance.
+
+*Fixed (committed: bro_dockerfiles =f74525b=, dockerProc =045ac32=; not yet built):*
+- bro_dockerfiles: =tigervnc-tools= in the VNC install of =bisos_deb13-fresh= and =bisos_deb12-fresh=
+  (the other five images are =FROM= them); =containerManage.sh= (all 7, still byte-identical):
+  a failed =vncpasswd= now says so and names the rebuild; README: images built before 2026-11-24 must
+  be rebuilt. =hubTag= not bumped (the user's, at upload).
+- bisos-pip/dockerProc =containerProc_csu.py=: the message keeps the engine's rc and stderr (it hid
+  "executable file not found") and names the rebuild.
+
+*Which images to rebuild:* all of them, confined base first --- on the VM =bisos_deb13-fresh=, then
+=bisos_deb13-sysd= (and any other in use); then =instanceDelete= + =instanceUp=. *Mass rebuild:* the
+walk from =debian/13/ftoBranchProc.spcs= (README, "Walking the Tree: Lifecycle Verbs"), confined,
+privileged, rootless-sysd in order.
+
+*Left, on the VM:* rebuild, re-create, =set=, then a VNC viewer and noVNC ask for the password;
+=clear=; survives restart; lost on delete. Then mark DONE.
+
