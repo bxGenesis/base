@@ -40,11 +40,19 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   - 3.1.2 the CBM run: the 261123 log read as seven problems (a--g; g, the anon clones not
     writable by bystar, found 2026-11-24). Two phases. Phase 1 (3.1.2.1--3.1.2.5), 2026-11-24:
     3.1.2.1 (bisos-pip/capability: =cbm_bootstrap=, the status under =/bisos/var/cbm/=) and 3.1.2.3
-    (bro_rawBisos: 13 pip-only =cbmBootstrap-sbom.pcs=, basename =cbsSpec=) done, committed (=8dfba00=, =7089792=), not
-    released; 3.1.2.2 checked, nothing missing; 3.1.2.4 (c and g): the install traced, the
-    model is implemented (default ACLs), so the VM broke it by A, B or C --- four read-only
-    commands on the VM tell which (its Results); 3.1.2.5 after the release of bisos.capability 0.27. Phase 2
-    (3.1.2.6--3.1.2.8): after gitist is merged with sbom.
+    (bro_rawBisos: 13 pip-only =cbmBootstrap-sbom.pcs=, basename =cbsSpec=) done, committed (=8dfba00=,
+    =7089792=); bisos.capability 0.27 released by the user (=6c87df8=). 3.1.2.2 checked, nothing missing.
+    3.1.2.4 (c and g): resolved --- cause A, the walk's shell without group =bisos=; the
+    container down+up before the walk (=rawBuildContainer.cs=) fixed it, and 261124-1 had no permission
+    error. 3.1.2.5: verified for the hereWeb leaves by 261124-1 (3.2), not yet for the whole walk.
+    Phase 2 (3.1.2.6--3.1.2.8): after gitist is merged with sbom.
+  - 3.2 the 261124-1 run (2026-11-25): Phase 1 verified for the 13 hereWeb leaves (0.27, bootstraps,
+    =/bisos/var/cbm=, no permission error after the container down+up). Seven new primary failures
+    (h--n) became 3.2.1--3.2.5; 3.2.2 (the =/bxRepos= and =/bisos/git/auth/= paths of csPlayer-webUi
+    and the pals leaf) done; 3.2.1 waits for bisos.capSpecs 0.12 and the next run; 3.2.3 DONE
+    (the user); 3.2.4 done, untested (bsip4, lcnt, and bisos.sbom, which needs a release); 3.2.5
+    done (bisos.common, needs a release). All committed 2026-11-25. 3.2.6, 3.2.7 [#C],
+    not urgent (comments, and links nothing in the install follows).
 
 * Architecture
 - Members: =base=, =fbxoPkgs=, =overview=, =provisioners=, =start= (=raw-bisos.sh=, the =bisos-genesis=
@@ -84,6 +92,16 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
   =/var/bisos=, =/bxo=, =/de/run=. The later steps run as =sudo -u bisos=, whose umask is =0022=, so
   the default ACL is the only source of group write: fix a deviation at its step, never by a
   =chmod -R= afterwards. A tool that chmods its own files (=egg-info=, tarball modes) escapes it.
+  The group itself reaches the walk only through a new session: =rawBuildContainer.cs=
+  (bisos/raw) runs a container down+up between =rawBisosBase= and =rawBisosCBMs=, the fix for
+  261123's (c) and (g), cause A of 3.1.2.4; since =67d21af= (2026-11-25, the user) its recreate +
+  build recipe also ends with down+up.
+- Paths (2026-11-25, user; 3.2.2): =/bisos/git/bxRepos= is canonical. =/bxRepos= is a hand-made
+  convenience link that a fresh install does not have, so nothing installed or committed (code, a
+  =cbsSpec=, a =package.json= =file:= dependency, a committed link) names it, nor one vcMode
+  (=/bisos/git/auth/=, =/anon/=). A Raw-BISOS rebuild has no =/bxRepos= at all (user, 2026-11-25), and
+  none of the raw chain, the container build or bisos.common creates it (checked); so a VM run finds
+  what still uses it. The check: the 3.2.2 Results.
 - VNC: =vncPassword set= hashes in a throw-away container of
   the image, so a tool missing there cannot be fixed in the running instance.
 

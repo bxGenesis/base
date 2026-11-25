@@ -298,7 +298,8 @@ Not in this stage: (d) in bisos-pip/debian; (f) is bisos-pip/b Stage 4.
   materialize through a bootstrap (it would pip-install into this host's =bisos3=).
 - Known gap: a failed =sbom_fullUpdate= exits 0 (bisos-pip/b Stage 4), so a failed bootstrap shows
   as the =cbsSpec-unresolvable= line that follows, not as =bootstrap failed=.
-- Left (yours): release bisos.capability 0.27 --- the VM needs it.
+- Released: bisos.capability 0.27 (the user, =6c87df8=); the 261124-1 VM run installed it, and the
+  13 hereWeb bootstraps ran (3.2).
 
 ** TODO [#A] <<3.1.2.2>> Phase 1 --- central clones: every repo the leaves need is cloned :aiAndMe:
 :PROPERTIES:
@@ -348,8 +349,7 @@ packages still win.
   =dev-bisos3/bin/= (the editable copy wins). PyPI has all 6 packages (=bisos.kafka 0.1= etc.), each
   with its =-cbs.pcs= and =Cbs-sbom.pcs= (wheels inspected).
 - The 22 status files untracked (=git rm --cached=; on disk and ignored now).
-- Pushed before 0.27 is on PyPI: the VM must not pull or rebuild until it is (0.26 ignores
-  the bootstraps, and the basename =cbsSpec=s then fail).
+- Pushed before 0.27 was on PyPI; 0.27 is out now (=6c87df8=), and the 261124-1 run used both (3.2).
 
 ** TODO [#A] <<3.1.2.4>> Phase 1 --- Raw chain: venvs and clones writable by bystar :aiAndMe:
 :PROPERTIES:
@@ -399,11 +399,21 @@ If A: nothing to fix in the install; a guard should refuse to walk without the g
 =sysCbmManage.cs -i fullyMaterialize= checks =bisos= in =os.getgroups()= and says to restart the
 session). If B or C: the fix is in the step found, not a =chmod -R= afterwards.
 
+*Resolved 2026-11-25: cause A.* =/bisos/git/auth/bxRepos/bisos/raw/rebuild/rawBuildContainer.cs= runs
+a container down+up between =rawBisosBase= and =rawBisosCBMs=, so the walk runs in a session that has
+group =bisos=; the 261124-1 run used it and had no permission error at all (3.2). The user's =67d21af=
+adds down+up to the end of the recreate + build recipe too. The four commands above are not
+needed; the proposed guard is still open, not done.
+
 ** TODO [#A] <<3.1.2.5>> Phase 1 --- Verify on the VM: =sysCbmFullyMaterialize.sh= end to end :aiAndMe:
 Raw-BISOS (anon), then =sysCbmFullyMaterialize.sh=: every leaf materialized, no =PermissionError=, no
 =command not found=, the statuses under =/bisos/var/cbm=; then re-read (d) and (e). Until bisos-pip/b
 Stage 4, read the log, not =failed==.
 ----- Results: ------
+
+*Partly verified 2026-11-25, by the 261124-1 run (3.2):* the 13 hereWeb leaves bootstrap, the
+statuses are under =/bisos/var/cbm=, no =PermissionError=, and (d), (e) are gone. Not the whole walk:
+3.2.1--3.2.5 (h--n) remain, to be seen in the next run.
 
 ** TODO [#B] <<3.1.2.6>> Phase 2 --- gitist merged with sbom: git repos in an sbom :aiAndMe:
 :PROPERTIES:
@@ -430,8 +440,264 @@ stops cloning the CBM repos (bisos-pip/common), as Stage 2 did for overview.
 When =/bisos/git/bxRepos= is detected, the bootstrap installs the needed packages from their local
 clones, editable (=dev-bisos3=), instead of PyPI copies into =bisos3=. Settle the detection rule
 first, and whether it belongs in bisos.sbom (any pip kind) or in the bootstrap.
+The editable install goes through the clone's =py3/pypiProc.sh -i pkgReInstall edit=, not a bare
+=pip install -e .=: =README.rst= and =_description.org= are not tracked, and =fullPrep= makes them.
 ----- Results: ------
 
+** TODO [#A] <<3.2>> 261124.1 Container Creation Success and Failures :aiAndMe:
+SCHEDULED: <2026-11-23 Mon 19:52>
+The logs of a complete VM run are at:
+    /bxRepos/mb-ephemera/pub-shuttle/tmp/CBMs-install-261124-1.out
+
+Digest it and identify primary and seconary failures.
+----- Results: ------
+*Digested 2026-11-25.* The first run with Phase 1 in place, and much better: bisos.capability 0.27
+installed (line 3314), every hereWeb leaf ran its =cbmBootstrap-sbom.pcs=, the statuses are under
+=/bisos/var/cbm/=, and there is no permission error anywhere in the log. The run did
+delete, up, =rawBisosBase=, down, up, =rawBisosCBMs= (line 1): the down+up before the walk.
+
+The log, by phase: the base install 22--10480; the hereWeb walk 10554--15211 (15 visited); pals
+15236 (3); induct 15267--20588 (8). Output is interleaved (stdout/stderr buffering), so an error
+can print a leaf or two after the leaf it belongs to; each below was traced to its leaf.
+
+*The 261123 problems (3.1.2), now:*
+
+| # | 261123                                   | 261124-1                         | Lines        |
+|---+------------------------------------------+----------------------------------+--------------|
+| a | PermissionError on <leaf>/cbmProc.status | gone: all under /bisos/var/cbm   | 10508-10537  |
+| b | <cap>Cbs-sbom.pcs: command not found     | gone for the 13 hereWeb leaves   | 10500-14843  |
+| c | pip: Permission denied in asc            | gone: no permission error at all | whole log    |
+| d | airflow units: inBytes ... is None       | gone (follows from c)            | 11269-11633  |
+| e | gatsbyBxSidebar Error=1; no Django       | gone: both materialize           | 14420-14727  |
+| f | failed=0 over real failures              | still: failed=0 in all 3 walks   | 15211, 20588 |
+| g | Permission denied in the anon clones     | gone                             | whole log    |
+
+So 3.1.2.4 needs no VM check any more: with the container down+up before the walk (cause A
+ruled out by construction), the bisos:bisos model held. (f) is unchanged: every failure below
+was reported as =failed=0= (bisos-pip/b Stage 4).
+
+*Primary failures, new in this run* (each is its own cause):
+
+| # | Symptom                            | Cause                           | Fix in                    |
+|---+------------------------------------+---------------------------------+---------------------------|
+| h | emacsSrcBuild, bleeBuild: rc 127   | bisos.capSpecs not in bisos3;   | bxObjects/bro_rawBisos    |
+|   | (emacs31SrcBuild-sbom.pcs)         | cbsSpec a git path (as b was)   |                           |
+| i | csPlayerUi: vite cannot load       | file:/bxRepos/cliGui/webCliGui; | bisos-web/csPlayer-webUi  |
+|   | node_modules/webcligui/.../App     | no /bxRepos on the VM (likely)  | or bxGenesis/start        |
+| j | pals example: cbsSpec does not     | cbsSpec under /bxRepos; cbm/    | bxObjects/bro_rawBisos    |
+|   | exist                              | links into /bisos/git/auth/     |                           |
+| k | base: pip install bisos-pip/devpi  | repo paths, not bisos.<cap>     | bisos/bsip4               |
+|   | (8x); rawBisos-sbom.pcs Failed     | names (b5675bb)                 |                           |
+| l | lcntCore: lcaLaTexBinsPrep.sh rc 1 | arabtex, lgrind, latex-beamer:  | bisos/lcnt                |
+|   |                                    | not in Debian 13                |                           |
+| m | revealJs-sbom Failed               | npm list --global rc 1, though  | bisos-pip/sbom (npm kind) |
+|   |                                    | reveal.js is installed          |                           |
+| n | base: bootstrap-vagrants clone     | bisos-pip/bootstrap has no      | bisos-pip/common          |
+|   | fails (cd: No such file)           | dev/bisos directory             |                           |
+
+- h. The 7 induct leaves were left out of 3.1.2.3 (its Results). emacsSrcBuild and bleeBuild
+  run =/bisos/git/bxRepos/bisos-pip/capSpecs/py3/bin/<x>-cbs.pcs=, which calls a sibling
+  =.pcs= by name; bisos.capSpecs (0.11 on PyPI, with those scripts) is not in =bisos3=. The 3.1.2.3
+  fix: a bootstrap with =pp("bisos.capSpecs")= and basename =cbsSpec=s. lcntCore, lcntBases,
+  lcntMultiMedia also run from the clone (=bisos-pip/lcnt=) but worked, as bisos.lcnt is installed.
+- i, j. Both name =/bxRepos/...=. On this host =/bxRepos -> /bisos/git/bxRepos= is root's, made
+  2026-11-04, and no install step creates it (grep of bxGenesis/start, provisioners, bsip4,
+  bisos.common). The vite error (=node_modules/webcligui= present, its target not) fits. To check on
+  the VM: =ls -la /bxRepos=. Fix: use =/bisos/git/bxRepos/...= in both, or have the raw chain make
+  the link. j also has its =cbm/= links absolute into =/bisos/git/auth/bxRepos/bisos-pip/pals/=, which
+  an anon host does not have: they should point to the installed =pals-*.spcs= (bisos.pals).
+- k. =rawBisos-sbom.pcs= lines 36--43 are =pp("bisos-pip/devpi")= etc.; the names are
+  =bisos.devpi=, ... (all 8 on PyPI). With the bootstraps they are redundant for the 6 hereWeb ones;
+  gitlab and postgres have no leaf. Fix the names or drop the lines --- yours to decide.
+- l. =bisos/lcnt/bin/lcaLaTexBinsPrep.sh= lines 199--205 install arabtex, lgrind, latex-beamer
+  (=E: Unable to locate package=, 17830--18027). The rest of TeX Live and hevea installed.
+- m. =npm list --global reveal.js= returns 1 three times, then the install says reveal.js 6.0.2 is
+  already in =/usr/local/lib/node_modules= (20552). Likely an nvm node (=nvm use default=) whose
+  global prefix is not =/usr/local=, so the check and the install look in two places. Not checked.
+- n. bisos.common's =baseDirBxRepos.py:1042= clones =bxGenesis/vagrants= into
+  =bisos-pip/bootstrap/dev/bisos/=, which that repo does not have. Drop it, or create the parent.
+
+*Minor (no capability is lost):*
+
+| # | Symptom                        | Cause                          | Fix in                     |
+|---+--------------------------------+--------------------------------+----------------------------|
+| o | csPlayerPerf: try-restart rc 5 | restart before the unit exists | bisos-web/csPlayerPerf-drf |
+| p | base: ssh-keygen -t dsa rc 255 | Debian 13 has no DSA keys      | bisos/bsip4 lcaSshAdmin.sh |
+| q | base: no /etc/apt/sources.list | Debian 13 uses deb822 sources  | the raw chain              |
+| r | astroStarter: hevea not found  | hevea comes with lcntCore,     | walk order                 |
+|   |                                | walked after hereWeb           |                            |
+
+- o. =csPlayerPerf-assemble.cs= restarts before the =sysdUnitsProc ensure= that installs the unit;
+  the unit is then created (14821). Whether csPlayerPerf runs: not in the log.
+- r. The existing =contentBody.html= is kept, so the site builds.
+
+Not problems: =policy-rc.d denied= (container), =pg_lsclusters: not found= (postgres postinst),
+=ALERT: Missing .../currents/fp=, the =banna: WARNING= lines (they are the text of a generated
+script, not warnings), =pltfrmDevelBecome= and =vscodeClaude= skipped (=control=available=, intended).
+
+*Does this run count as 3.1.2.5?* For the 13 hereWeb leaves Phase 1 is verified: bootstrap,
+status place, permissions. Not for the whole walk: h--n remain, and (f) hides them.
+
+Proposed next (each yours to agree; none done): 3.2.1 h (bro_rawBisos induct bootstraps);
+3.2.2 i and j (/bxRepos: the VM check first); 3.2.3 k (bsip4); 3.2.4 l and m (lcnt, sbom);
+3.2.5 n (bisos.common). The minor ones as notes in their repos' workplans.
+
+
+
+** TODO [#A] <<3.2.1>> induct leaves: bootstraps and basename cbsSpecs (h) :aiAndMe:
+:PROPERTIES:
+:REPO: bxObjects/bro_rawBisos
+:END:
+As 3.1.2.3 did for hereWeb: =cbmBootstrap-sbom.pcs= in the induct leaves whose CBS is in a pip
+package (=bisos.capSpecs= for emacsSrcBuild, bleeBuild; =bisos.lcnt= for the lcnt ones;
+=bisos.vscodeClaude=), and =cbsSpec= a basename. Check first that bisos.capSpecs 0.11 on PyPI has
+=emacs31SrcBuild-sbom.pcs= and =blee31Build-sbom.pcs=.
+----- Results-MB: ------
+bisos.capSpecs 0.11 -- was incomplete --- 0.12 should fix that
+
+
+** TODO [#A] <<3.2.2>> =/bxRepos= on a fresh install; the pals example's links (i, j) :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-web/csPlayer-webUi bxObjects/bro_rawBisos
+:END:
+On the VM first: =ls -la /bxRepos=. Then decide: the raw chain makes =/bxRepos -> /bisos/git/bxRepos=,
+or nothing names =/bxRepos= (csPlayer-webUi =package.json=, the pals =cbsSpec=). Either way, the pals
+example's =cbm/= links (bro_rawBisos) stop pointing into =/bisos/git/auth/=: to the installed
+=pals-*.spcs= of bisos.pals.
+/bxRepos is a short hand for convenience.  /bisos/git/bxRepos is acnonical.
+That is the one that should be used.  /bxRepos should not be used anywhere in any of the
+installation or bisos-pip packages.
+----- Results: ------
+*Done 2026-11-25* (csPlayer-webUi =b840b12=, bro_rawBisos =df73afc=, the skill =1e8c8b7=). The rule, as
+agreed: nothing installed or committed depends on =/bxRepos= or on one vcMode (=/bisos/git/auth/=,
+=/bisos/git/anon/=); it names =/bisos/git/bxRepos/...= (or a basename on PATH). =/bxRepos= stays a
+hand-made convenience link (this host's is root's, of 2026-11-04); the raw chain does not create it, so
+the VM keeps finding what still uses it.
+
+The uses that broke the fresh install (group 1), fixed:
+- bisos-web/csPlayer-webUi =site/package.json=: =webcligui= =file:/bisos/git/bxRepos/cliGui/webCliGui=;
+  =package-lock.json= regenerated by =npm install --package-lock-only= (its relative key is now
+  =../../../../../bxRepos/...=, which reaches =/bisos/git/bxRepos= from an anon or an auth clone).
+  =node_modules= untouched: this host's still links through =/bxRepos=, until the next =npm ci=.
+- bxObjects/bro_rawBisos:
+  - =sys/pals/bro_rawBisosPals/path/value= (the PALS-BXO's checkout, the input of the plant):
+    =/bisos/git/bxRepos/bxObjects/bro_rawBisos/bro_rawBisosPals=.
+  - Then =palsOfSys.cs -i palsLeavesPlant= regenerated =sys/cbm/pals/bro_rawBisosPals/example/
+    cbmProc.spcs= (its =cbsSpec= and header); the gate and status untouched.
+  - The pals example's 4 =cbm/= links and =sys/cbm/facter-cbs-is-np-sysd.cs= now point to
+    =/bisos/git/bxRepos/bisos-pip/{pals,facter}/py3/bin/=, not =/bisos/git/auth/=. Both repos are cloned
+    centrally (bisos.common =baseDirBxRepos.py= 1067, 1088; the 261124-1 log, 1107, 1124).
+- =cbm-authorship= skill (bxObjects/aiTemplates-DE): the rule, under "cbsSpec resolution" and
+  "What NOT to do".
+
+Tested here: all 5 links resolve; =resolveCbsSpec()= finds the new =cbsSpec=; =pals-cbs.spcs= loads
+through the new link (examples menu); =cbm_status= on the pals leaf (read-only). Not tested: a
+materialize, on this host or the VM --- the next VM run is the test (no =/bxRepos= there).
+
+The check, for any repo (run from its top):
+: git grep -nIE '(^|[^a-zA-Z/_.-])/bxRepos/|/bisos/git/(auth|anon)/' -- ':!*.org' ':!*.org_archive'
+: git ls-files -s | awk '$1=="120000"{print $4}' | while read l; do readlink "$l"; done | grep -E '^/bxRepos|^/bisos/git/(auth|anon)/'
+After this, in the two repos it finds only groups 2 and 3 (3.2.6, 3.2.7), and
+=platformCapabilities.py:67=, which maps =/bisos/git/auth/bxRepos/= to =/bisos/git/bxRepos/= (correct).
+
+** DONE [#A] <<3.2.3>> bsip4 =rawBisos-sbom.pcs=: the CBM packages by name (k) :aiAndMe:
+CLOSED: [2026-11-25 Wed 05:24]
+:PROPERTIES:
+:REPO: bisos/bsip4
+:END:
+Lines 36--43, =pp("bisos-pip/<x>")=: =bisos.<x>=, or drop them (the bootstraps install the six with a
+leaf; gitlab and postgres have none). Yours to decide.
+----- Results: ------
+
+*Done 2026-11-25, by the user; checked by Claude.* =bin/rawBisos-sbom.pcs= (bisos/bsip4 =252fecf=):
+all 8 are now =pp("bisos.<x>")= --- devpi, geneweb, gitlab, grafana, kafka, postgres, prometheus,
+pypiserver --- and all 8 are on PyPI (=pip index versions=, 2026-11-24). Kept, not dropped. No other
+=-sbom.pcs= in bsip4, bro_rawBisos, bisos-pip or bisos/lcnt has a path-like =pp()= name. To be seen in
+the next VM run: no =Invalid requirement= in the base install.
+
+** TODO [#B] <<3.2.4>> lcnt on Debian 13: LaTeX bins and reveal.js (l, m) :aiAndMe:
+:PROPERTIES:
+:REPO: bisos/bsip4 bisos/lcnt bisos-pip/sbom
+:END:
+- l. lcntCore reports =FAILED: lcaLaTexBinsPrep.sh -i fullUpdate=; its =extraInstall= tries arabtex,
+  lgrind, latex-beamer, which Debian 13 no longer has.
+- m. =revealJs-sbom.pcs= reports =Failed: Error=1= though reveal.js is installed.
+----- Results: ------
+
+*Done 2026-11-25* (bsip4 =252fecf=, lcnt =17f74aa=, sbom =3cc2c51=); not run on any host (the user's
+instruction: not on this VM). The causes were other than they looked; the log interleaves =fullUpdate=
+and =extraInstall=.
+
+l. =fullUpdate='s failure is false. Run as bystar, =vis_fullUpdate= re-runs itself as root (=sudo=;
+texlive-full and hevea installed), then returns 1 whatever that run did:
+=if vis_reRunAsRoot ...; then lpReturn 1; fi=. The arabtex, lgrind, latex-beamer errors are
+=extraInstall='s, which does not fail on them (=opDo= goes on; its last command succeeded).
+- bisos/bsip4 =bin/seedSubjectBinsPrepDist.sh:201=: =lpReturn ${globalReRunRetVal}=, the root run's
+  status, as =seedAdminDaemonSysV.sh= (279, 295, 311) already does. Every binsPrep script's
+  =fullUpdate= gets it.
+- bisos/lcnt =bin/lcaLaTexBinsPrep.sh=, =vis_extraInstall=: arabtex, lgrind, latex-beamer commented out
+  (with the reason), as the file does for writer2latex; =ln -s= -> =ln -sfn= for the bxtex macros link
+  (a re-run made a link inside the macros directory).
+- Left: the same =lpReturn 1= in bsip4 =bisosCurrentsManage.sh:197=, =seedFgcSwSvc.sh:205=,
+  =bystarHereAcct.libSh:237=, =seedAdminDaemonSvc.sh:244=; to fix when they show up.
+- To check on the next VM run, before trusting the comment: =kpsewhich arabtex.sty lgrind.sty beamer.cls=
+  (texlive-full should have all three).
+
+m. revealJs installs with its own function (=/usr/bin/npm=, =/usr/local=), which said "already in ...
+skipped". Before it, bisos.sbom's generic =npmPkg_isInstalled= ran =npm list --global= under the user's
+nvm (another prefix): exit 1, and that error stayed in the caller's shared outcome, so
+=sbom_fullUpdate= failed --- and returned before its nested sboms (=sbomSpecs_fullUpdate=).
+- bisos-pip/sbom =py3/bisos/sbom/sbom_csu.py=:
+  - =npmPkgs_update=: a package with its own =func= goes to it directly; the generic check is only
+    for the plain =npm install= path (the old =func= branch there, now dead, removed).
+  - =npmPkg_isInstalled=: =npm list ... || true=; its stdout decides (as before), so "absent" is an
+    answer, not an error in the shared outcome. Also stops the false error lines of other npm sboms.
+
+Checked statically only: =bash -n= on =seedSubjectBinsPrepDist.sh= ok; =lcaLaTexBinsPrep.sh= fails
+=bash -n= at line 38 (its COMEEGA header), as the committed version does; =sbom_csu.py= parses.
+Left (yours): bisos-pip/sbom is 1 commit behind (=4225b72 0.19=, =setup.py= only): =git pull --rebase
+--autostash= before committing; then a bisos.sbom release for the VM to get m.
+
+** TODO [#B] <<3.2.5>> bisos.common: the =bootstrap-vagrants= clone (n) :aiAndMe:
+:PROPERTIES:
+:REPO: bisos-pip/common
+:END:
+The registry (=baseDirBxRepos.py= 1041--1046) clones =bxGenesis/vagrants= a second time, as
+=bisos-pip/bootstrap/dev/bisos/bootstrap-vagrants=. bisos-pip/bootstrap has had no =dev/= since 2021
+(=84f2730=), so the =cd= fails on every install (261124-1 log, 1003 and 1086). Nothing is lost:
+=bxGenesis/vagrants= is cloned in its own gitGroup (registry 1017, log 992), and nothing uses the copy.
+The fix (user, 2026-11-25): comment out the five lines. Needs a bisos.common release.
+----- Results: ------
+
+*Done 2026-11-25* (=8c20899=). bisos-pip/common =py3/bisos/common/baseDirBxRepos.py=: the five
+=gitCloneBase(...)= lines commented out; the comment above them now says why. Checked: the file
+parses; no other repo (bsip4, bxGenesis, bisos-pip) names =bootstrap-vagrants= or =bootstrap/dev=. Not
+run. Reaches a fresh install with the next bisos.common release (yours); the next VM run should show no
+=cd: .../bootstrap/dev/bisos= line.
+
+** TODO [#C] <<3.2.6>> Particulars dblocks: =This File:= under =/bxRepos= (group 2) :aiAndMe:
+:PROPERTIES:
+:REPO: blee
+:END:
+About 25 files in bisos-pip (and a few in bisos-web) carry =** This File: /bxRepos/...= or
+=/bisos/git/auth/...= in their particulars dblock, written when the file was visited under that
+path. Harmless (a comment), but against the 3.2.2 rule. The fix is in Blee's dblock: write the
+canonical =/bisos/git/bxRepos/...=; then the dblocks are regenerated as files are next touched.
+----- Results: ------
+
+** TODO [#C] <<3.2.7>> Committed links and values into =/bisos/git/auth/= (group 3) :aiAndMe:
+:PROPERTIES:
+:REPO: bxObjects/bro_rawBisos bisos-pip/namespace bisos-pip/pals
+:END:
+They dangle on an anon host but do not break the CBM walk:
+- the =AI-Activity.org=, =AI-Outputs.org= links of bro_rawBisos's web sites and of some bisos-pip repos,
+  and the =.aiActivity.cs/fps/templates/value= files (aiActivity writes the templates path it was
+  given: bisos-pip/aiActivity should write the canonical one);
+- =bisos-pip/namespace/py3/bisos/*= (about 70 links into =/bisos/git/auth/=);
+- =palsOfSys.cs= stores the checkout path as typed (=path/value= was =/bxRepos/...=): it could
+  store =/bisos/git/bxRepos/...= instead.
+Use the 3.2.2 check to list them per repo.
+----- Results: ------
 
 ** -
 
