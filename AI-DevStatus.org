@@ -52,7 +52,10 @@ As of 2026-11-24. The base repo of the bxGenesis gitGroup, a =gitGroup= AI-Activ
     and the pals leaf) done; 3.2.1 waits for bisos.capSpecs 0.12 and the next run; 3.2.3 DONE
     (the user); 3.2.4 done, untested (bsip4, lcnt, and bisos.sbom, which needs a release); 3.2.5
     done (bisos.common, needs a release). All committed 2026-11-25. 3.2.6, 3.2.7 [#C],
-    not urgent (comments, and links nothing in the install follows).
+    not urgent (comments, and links nothing in the install follows). 3.2.8 (the next run's
+    =emacs31SrcBuild=: no =deb-src=): =raw-bisos.sh= (bxGenesis/start) enables it at its apt-sources
+    step, deb822 included; bsip4's =debAptSourcesManage.sh= reads deb822; done, untested (start =59c7de2=,
+    bsip4 =d0171c5=).
 
 * Architecture
 - Members: =base=, =fbxoPkgs=, =overview=, =provisioners=, =start= (=raw-bisos.sh=, the =bisos-genesis=

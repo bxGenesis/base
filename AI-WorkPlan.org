@@ -12,15 +12,15 @@
 
 ####+BEGIN: b:ai:workflow/driver
 *  [[elisp:(revert-buffer)][revert-buffer]] | [[elisp:(toggle-read-only)][read/wr]] | [[elisp:(show-all)][Show-All]]  [[elisp:(org-shifttab)][Overview]]  [[elisp:(progn (org-shifttab) (org-content))][Content]] | [[elisp:(delete-other-windows)][(1)]] | [[elisp:(progn (save-buffer) (kill-buffer))][S&Q]] [[elisp:(save-buffer)][Save]] [[elisp:(kill-buffer)][Quit]] [[elisp:(bury-buffer)][Bury]] [[elisp:(magit)][Magit]]
-*  [[elisp:(org-cycle)][AI Workflow Driver]]  --  *$Emacs*  /@VS Code/  #prompt-claude  _!submit-claude_
+*  [[elisp:(org-cycle)][AI Workflow Driver]]  --  *$Emacs*  *^Bash*  /@VS Code/  #prompt-claude  _!submit-claude_
   State     :: (Refresh, on the Info line, shows the session)
   Info      :: *[[elisp:(b:ai:workflow/driver/refresh)][$Refresh]]* | *[[elisp:(blee:bnsm:panel-goto "/bisos/panels/bisos-core/bisos-pip/bisos.aiActivity/newStart/_nodeBase_")][$Panel]]* | *[[elisp:(b:vscode:claude/dispatch)][$Transient]]* | *[[elisp:(b:vscode/partnerShow)][$partner]]* | *[[file:/bisos/git/bxRepos/blee/vscode-claude/README.org][$vscode-claude-README]]* | *[[file:/bisos/git/bxRepos/bisos-pip/aiActivity/README.org][$aiActivity-README]]*
   newStart  :: *[[bashRun:vscodeClaude-assemble.cs -i fullCheck][$setup-check]]* | *[[bashRun:vscodeClaude-assemble.cs -i fullUpdate][$setup]]* | *[[elisp:(b:vscode/init)][$partner-init]]* | [[aiActivity:session-start][#session-start]] | _[[aiActivity:S=session-start][!session-start]]_
-  VS Code   :: /[[elisp:(b:vscode/fileOpen)][@Visit]]/ | /[[elisp:(b:vscode/rootOpen)][@root-window]]/   <- Ctrl+K Ctrl+E: this file in Blee, at its line
-  Session   :: *[[elisp:(b:vscode:claude/sessionSelect)][$select-session]]* | [[aiActivity:session-start][#session-start]] | [[aiActivity:session-report][#session-report]] | _[[aiActivity:S=session-start][!session-start]]_
-  Activity  :: [[aiActivity:activity-reach][#activity-reach]] | [[aiActivity:activity-report][#activity-report]] | _[[aiActivity:S=activity-reach][!activity-reach]]_
+  VS Code   :: *[[bashRunHere:vscode.cs][^vscode.cs]]* | *[[bashRunHere:vscodeClaude.cs][^vscodeClaude.cs]]* | /[[elisp:(b:vscode/fileOpen)][@Visit]]/ | /[[elisp:(b:vscode/rootOpen)][@root-window]]/   <- Ctrl+K Ctrl+E
+  Session   :: *[[elisp:(b:vscode:claude/sessionSelect)][$select-session]]* | [[aiActivity:session-start][#session-start]] | [[aiActivity:session-report][#session-report]] | [[aiActivity:session-summary][#session-summary]] | _[[aiActivity:S=session-start][!session-start]]_
+  Activity  :: *[[bashRunHere:aiActivity.cs][^aiActivity.cs]]* | [[aiActivity:activity-reach][#activity-reach]] | [[aiActivity:activity-report][#activity-report]] | _[[aiActivity:S=activity-reach][!activity-reach]]_
   Read      :: [[aiActivity:status-read][#status-read]] | [[aiActivity:archive-read][#archive-read]] | [[aiActivity:ai-outputs][#ai-outputs]] | _[[aiActivity:S=status-read][!status-read]]_ | _[[aiActivity:S=archive-read][!archive-read]]_ | _[[aiActivity:S=ai-outputs][!ai-outputs]]_
-  Work      :: [[aiActivity:todo-do][#todo-do]] | [[aiActivity:todo-done][#todo-done]] | _[[aiActivity:S=todo-do][!todo-do]]_ | _[[aiActivity:S=todo-done][!todo-done]]_
+  Work      :: [[aiActivity:todo-do][#todo-do]] | [[aiActivity:todo-done][#todo-done]] | _[[aiActivity:S=todo-do][!todo-do]]_ | _[[aiActivity:S=todo-done][!todo-done]]_ | *[[elisp:(b:ai:workflow/driver/aiOutputsVisit)][$Visit-AiOutputs]]*
   Record    :: [[aiActivity:status-update][#status-update]] | [[aiActivity:archive-update][#archive-update]] | [[aiActivity:context-trim][#context-trim]] | _[[aiActivity:S=status-update][!status-update]]_ | _[[aiActivity:S=archive-update][!archive-update]]_
   Git       :: [[aiActivity:git-uncommitted-list][#git-uncommitted-list]] | [[aiActivity:git-commit-msg][#git-commit-msg]] | _[[aiActivity:S=git-uncommitted-list][!git-uncommitted-list]]_ | _[[aiActivity:S=git-commit-msg][!git-commit-msg]]_
   Close     :: [[aiActivity:session-verify][#session-verify]] | [[aiActivity:skills-improve][#skills-improve]] | _[[aiActivity:S=git-commit-walk][!git-commit-walk]]_ | _[[aiActivity:S=git-pull-list-add][!git-pull-list-add]]_
@@ -698,6 +698,41 @@ They dangle on an anon host but do not break the CBM walk:
   store =/bisos/git/bxRepos/...= instead.
 Use the 3.2.2 check to list them per repo.
 ----- Results: ------
+
+** TODO [#A] <<3.2.8>> =deb-src= enabled at the start of the raw install (q; emacs31SrcBuild) :aiAndMe:
+:PROPERTIES:
+:REPO: bxGenesis/start bisos/bsip4
+:END:
+The VM run after 261124-1 (the user, 2026-11-25): =emacs31SrcBuild FAILED: no deb-src in apt
+sources=. =apt-get build-dep emacs= needs =deb-src=, and nothing enables it on Debian 13, whose sources
+are deb822 (=/etc/apt/sources.list.d/debian.sources=, =Types: deb=). The user's decision of 2026-11-12
+(AI-Outputs.org, "=deb-src= should be enabled by the rawBisos install"): enable it where
+=raw-bisos.sh= first adjusts the apt sources, not in a CBM; =emacs31SrcBuild= only checks it.
+- =raw-bisos.sh= (bxGenesis/start) =installUnsitedBisos=: the =/etc/apt/sources.list= step (minor
+  failure q: it assumed the file) and =deb-src= enabled there, before =apt-get update=.
+- =debAptSourcesManage.sh= (bisos/bsip4) =verifyDebSrc= / =enableDebSrc=, which
+  =lcaEmacsSrcBinsPrep.sh -i srcEnvSetup= (bisos/blee) calls: they read only =sources.list=.
+----- Results: ------
+2026-11-25 (Claude), not run on the VM (the user's next raw run tests it):
+- bxGenesis/start =raw-bisos.sh=: new =vis_aptSourcesDebSrcEnable= (with an examples line), called by
+  =installUnsitedBisos= before its =apt-get update=. deb822 =debian.sources=: =Types: deb= becomes
+  =Types: deb deb-src= (all stanzas). =sources.list=: a =deb-src= twin of each =deb= line of a
+  =debian.org= host that lacks one. Third-party repositories are left alone: they may publish no
+  sources, and =apt-get update= would then fail. Idempotent; =.orig= copies made once (=cp -n=). The cdrom
+  step now runs only when =sources.list= exists.
+- bisos/bsip4 =debAptSourcesManage.sh=: =verifyDebSrc= reads =sources.list=, =sources.list.d/*.list=
+  and the deb822 =*.sources= (as capSpecs' =emacs31SrcBuildInfo.debSrcEnabled= does); =enableDebSrc=
+  keeps its Ubuntu path (=add-apt-repository=, when =sources.list= names ubuntu.com), else does the
+  Debian edits above, then =apt-get update= and =verifyDebSrc=. The two scripts duplicate the edit:
+  =raw-bisos.sh= runs standalone (fetched by wget, before bsip exists).
+- Tested on scratch files: the awk on a Debian 12 =sources.list= (cdrom, deb.debian.org with its
+  =deb-src=, security, docker): one twin added, for security only; a second pass changes nothing; the
+  sed on a two-stanza =debian.sources=, and again (no change). =verifyDebSrc= on this host: rc 0
+  (its =debian.sources= has =deb-src=); the regex is rc 1 on =Types: deb= only. =bash -n= cannot
+  check =raw-bisos.sh= (its =_CommentBegin_= alias; HEAD fails the same way): its examples print, with
+  the new line.
+- Not done: =lcaEmacsSrcBinsPrep.sh= unchanged (it calls the two verbs; its describe still says Ubuntu
+  only). =enableDebSrc= on Debian not run anywhere.
 
 ** -
 
